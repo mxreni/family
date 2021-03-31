@@ -6,9 +6,11 @@ const bcrypt = require("bcryptjs");
 const router = express.Router();
 const passport = require("passport");
 const isAuthenticated = require("../middleware/auth");
+// Local Strategy Login
 router.post("/login", passport.authenticate("local"), (req, res) => {
   if (req.user) {
     return res.status(200).json({
+      user: req.user,
       status: "success",
       message: "logged in",
     });
@@ -49,6 +51,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Get the user
 router.get("/", isAuthenticated, async function (req, res) {
   try {
     if (req.user) {

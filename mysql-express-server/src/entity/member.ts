@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Relationship } from "./relationship";
 import { User } from "./user";
 
 @Entity({ name: "Members" })
@@ -15,6 +16,20 @@ export class Member {
   @Column({ name: "gender", nullable: false })
   gender: string;
 
+  @Column("timestamp", {
+    name: "createdAt",
+    default: () => `now()`,
+    nullable: false,
+  })
+  createdAt: Date;
+
+  @Column("timestamp", {
+    name: "updatedAt",
+    default: () => `now()`,
+    nullable: false,
+  })
+  updatedAt: Date;
+
   @Column({ type: "varchar", name: "email" })
   email: string;
 
@@ -26,4 +41,7 @@ export class Member {
 
   @ManyToOne((type) => User, (user) => user.members)
   user: User;
+
+  @ManyToOne((type) => Relationship, (relationship) => relationship.members)
+  relationship: Relationship;
 }

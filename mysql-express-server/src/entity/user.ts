@@ -35,24 +35,44 @@ export class User {
     name: "email",
     length: 180,
     unique: true,
-    nullable: false,
+    nullable: true,
   })
   email: string;
 
   @Column({
     name: "password",
-    nullable: false,
+    nullable: true,
   })
   password: string;
 
-  @Column()
+  @Column("timestamp", {
+    name: "createdAt",
+    default: () => `now()`,
+    nullable: false,
+  })
+  createdAt: Date;
+
+  @Column("timestamp", {
+    name: "updatedAt",
+    default: () => `now()`,
+    nullable: false,
+  })
+  updatedAt: Date;
+
+  @Column({ type: "text", name: "photo_url", nullable: true })
+  photourl: string;
+
+  @Column({ nullable: true })
   salt: string;
 
-  @Column({
-    name: "photourl",
-    nullable: true,
-  })
-  photourl: string;
+  @Column({ name: "facebookID", length: 80, nullable: true })
+  facebookID: string;
+
+  @Column({ name: "googleID", length: 80, nullable: true })
+  googleID: string;
+
+  @Column({ name: "twitterID", length: 80, nullable: true })
+  twitterID: string;
 
   @OneToMany((type) => Member, (member) => member.user)
   members: Member[];
