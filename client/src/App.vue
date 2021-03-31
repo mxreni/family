@@ -1,16 +1,20 @@
 <template>
   <!-- <Main v-if="userLogged" /> -->
-  <Main />
-  <!-- <router-view name="Auth"></router-view> -->
+  <Main v-if="userLogged" />
+  <router-view name="Auth"></router-view>
 </template>
 
 <script>
-import { onMounted, ref } from "@vue/runtime-core";
+// life cycle hook
+import { computed, onMounted, ref, watchEffect } from "@vue/runtime-core";
+
+// components
 import Brand from "./components/Brand";
 import Sidebar from "./components/Auth/Sidebar";
 import Main from "./views/Home/Main";
 import AuthLayout from "./Layout/AuthLayout";
 
+import { mapState, mapActions } from "vuex";
 import { getCurrentUser } from "./api";
 import { useRouter } from "vue-router";
 
@@ -25,6 +29,8 @@ export default {
   setup() {
     const userLogged = ref(false);
     const router = useRouter();
+    const dummy = ref(true);
+
     onMounted(async () => {
       const result = await getCurrentUser();
       console.log(result);
@@ -33,12 +39,14 @@ export default {
       } else {
         userLogged.value = false;
         router.replace({
-          name: "Signup",
+          name: "Login",
         });
       }
     });
+
     return {
       userLogged,
+      dummy,
     };
   },
 };

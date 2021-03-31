@@ -1,8 +1,7 @@
+//    v-if="userLogged && first_name"
+ 
 <template>
-  <div
-    class="container"
-    v-if="userLogged && first_name"
-  >
+  <div class="container">
     <p> Logged in successfully <router-link
         @click="logOut"
         class="user-name log-out"

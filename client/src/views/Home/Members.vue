@@ -2,66 +2,46 @@
   <div class="home-main">
     <div
       class="form-modal"
-      @openForm="openFormModal"
+      v-if="toggleForm"
     >
-      <FormModal
-        v-if="openFormModal"
-        @open="displayForm"
-      />
+      <FormModal @toggleFormModal="toggleFormModal" />
     </div>
-    <div class="main-header">
-      <div>
-        <h4 class="main-header-title">Family Members</h4>
-      </div>
-      <div class="main-header-menus">
-        <img
-          src="../../assets/icons/calendar_view_month.svg"
-          alt="calendar-icon"
-        >
-        <img
-          src="../../assets/icons/view_list.svg"
-          alt="view-list"
-          srcset=""
-        >
-        <button class="spl-btn">OrderBy</button>
-        <button @click="openForm">Add Member</button>
-      </div>
-    </div>
-    <div class="main-body">
-      <div
-        v-for="card in cards"
-        :key="card"
-        class="card"
-      >
-        <div class="card-info">
+    <div class="members">
+      <div class="main-header">
+        <div>
+          <h4 class="main-header-title">Family Members</h4>
+        </div>
+        <div class="main-header-menus">
           <img
-            src="../../assets/icons/Members.svg"
-            alt="user"
-            class="card-image"
-          />
-          <div class="card-body">
-            <p>First last</p>
-            <p>Female</p>
-            <p>unknown</p>
-            <p>unknown</p>
-          </div>
-        </div>
-        <div class="card-footer">
-          <p>Phone: 0000000000</p>
-          <p>Email: abc@gmail.com</p>
-        </div>
-        <div class="edit">
-          <div class="edit-icon-contain"><img
-              src="../../assets/icons/edit.svg"
+            src="../../assets/icons/calendar_view_month.svg"
+            alt="calendar-icon"
+          >
+          <img
+            src="../../assets/icons/view_list.svg"
+            alt="view-list"
+          >
+          <button class="btnn spl-btn"><img
+              src="../../assets/icons/order_by_light.svg"
               alt="view-list"
-              class="edit-icon"
-            /></div>
+              class="btn-icon"
+            >OrderBy</button>
+          <button
+            @click="toggleFormModal"
+            class="btnn btn-trns"
+          ><img
+              src="../../assets/icons/add_circle.svg"
+              alt="view-list"
+              class="btn-icon"
+            >Add Member</button>
         </div>
       </div>
-    </div>
-    <div class="main-footer">
-      <button class="spl-btn disabled">prev</button>
-      <button class="spl-btn">next</button>
+      <div class="main-body">
+        <Card :cards='cards' />
+      </div>
+      <div class="main-footer">
+        <button class="btnn btn-mv disabled">prev</button>
+        <button class="btnn btn-mv">next</button>
+      </div>
     </div>
   </div>
 </template>
@@ -69,43 +49,22 @@
 <script>
 import { ref } from "@vue/reactivity";
 import FormModal from "../../components/FormModal";
+import Card from "../../components/App/Card";
 export default {
   components: {
     FormModal,
+    Card,
   },
   setup(props, { emit }) {
-    const cards = ref([
-      23,
-      243,
-      54,
-      32,
-      2323,
-      434,
-      223,
-      2323,
-      32,
-      323,
-      434,
-      323,
-    ]);
-    const openFormModal = ref(false);
-    const displayForm = () => {
-      console.log("here");
-      openFormModal.value = true;
-    };
-    const closeForm = () => {
-      openFormModal.value = false;
-    };
-    const openForm = () => {
-      console.log("clicked");
-      emit("openForm");
+    const cards = ref([23, 243, 54, 32, 2323, 434, 223, 2323, 32]);
+    const toggleForm = ref(false);
+    const toggleFormModal = () => {
+      toggleForm.value = !toggleForm.value;
     };
     return {
       cards,
-      openForm,
-      openFormModal,
-      displayForm,
-      closeForm,
+      toggleForm,
+      toggleFormModal,
     };
   },
 };
@@ -122,15 +81,14 @@ export default {
 .form-modal {
   position: absolute;
   right: 0;
-  width: 530px;
+  width: 540px;
   background: #fff;
-  display: none;
+  display: block;
   z-index: 1;
-  bottom: 0;
-  top: 110px;
-  min-height: 97vh;
-  margin: -2.7rem 0;
-  border: 1px solid #008bdc55;
+  overflow: hidden;
+  bottom: -10;
+  top: 70px;
+  border: 1px solid #008bdc;
 }
 .main-header {
   display: flex;
@@ -142,27 +100,54 @@ export default {
   font-weight: 600;
   color: #008dbc;
 }
+
 .main-header-menus {
-  width: 340px;
+  width: 430px;
   display: flex;
+  box-sizing: border-box;
   justify-content: flex-end;
 }
 button {
-  width: 120px;
-  padding: 6px;
+  width: 130px;
+  padding: 0px 10px;
   cursor: pointer;
   border: 1px solid #008dbc;
   background: #fff;
   border-radius: 2px;
 }
 .main-header-menus > * {
-  margin: 0 0.8rem;
+  margin: 0 0.6rem;
 }
-.spl-btn {
+
+.btnn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 10px;
   background: #008dbc;
   color: #fff;
   border: none;
 }
+.btn-icon {
+  transform: scale(0.8);
+}
+.btn-mv {
+  margin: 0 10px;
+  padding: 7px;
+  justify-content: center;
+}
+
+.btn-trns {
+  background: white;
+  border: 1px solid #008dbc;
+  color: #008dbc;
+  margin-right: 0;
+}
+
+.spl-btn {
+  padding: 0 15px;
+}
+
 .main-body {
   display: grid;
   margin: 2rem 0;
@@ -170,57 +155,15 @@ button {
   grid-row-gap: 2rem;
   grid-column-gap: 1.4rem;
 }
-.card-info {
-  display: flex;
-}
-.card-body {
-  text-align: left;
-  padding-top: 0.5rem;
-  line-height: 1.3rem;
-}
-.card-image {
-  widows: 100px;
-  height: 100px;
-}
-.card-footer {
-  text-align: left;
-  padding: 0 1rem;
-  line-height: 1.3rem;
-}
-
 .main-footer {
   display: flex;
   width: 260px;
   justify-content: space-between;
-  margin: 1rem 0;
+  margin: 2rem auto;
   align-self: center;
-}
-.card {
-  border: 1px solid #008dbc;
-  font-size: 0.9rem;
-  padding-bottom: 0.5rem;
-  border-radius: 5px;
-  position: relative;
-}
-.edit {
-  position: absolute;
-  bottom: -8px;
-  right: -30px;
-  border-bottom: 40px solid #008dbc22;
-  transform: rotate(-225deg);
-  border-left: 40px solid transparent;
-  border-right: 40px solid transparent;
 }
 .disabled {
   opacity: 0.4;
-}
-.edit-icon-contain {
-  position: absolute;
-  top: 10px;
-  right: -15px;
-}
-.edit-icon {
-  transform: scale(0.8) rotate(45deg);
 }
 
 @media screen and (min-width: 358px) {
@@ -230,12 +173,10 @@ button {
     width: 100%;
     margin: 1.5rem auto;
   }
-  /* .main-header-menus button {
+
+  .main-header-menus button {
     display: none;
-  } */
-  /* .main-header-menus {
-    width: 60px;
-  } */
+  }
 }
 
 @media screen and (min-width: 658px) {
@@ -244,9 +185,6 @@ button {
     margin: 1.5rem 0;
     width: 100%;
   }
-  .card {
-    width: 100%;
-  }
 }
 
 @media screen and (min-width: 900px) {
@@ -255,8 +193,8 @@ button {
     margin: 1.5rem 0;
     width: 100%;
   }
-  .card {
-    width: 100%;
+  .main-header-menus button {
+    display: flex;
   }
 }
 
@@ -265,10 +203,6 @@ button {
     grid-template-columns: repeat(3, 1fr);
     margin: 1.5rem 0;
     width: 100%;
-  }
-  .card {
-    width: 100%;
-    max-width: 300px;
   }
 }
 </style>

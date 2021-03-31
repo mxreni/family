@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
 export default {
   props: ["title"],
   setup() {
@@ -30,4 +29,20 @@ export default {
 </script>
 
 <style>
+.router-link-exact-active {
+  background-color: #008dbc22;
+}
+.sidebar-link {
+  padding: 0;
+  display: flex;
+  padding: 0.7rem 1.2rem;
+  box-sizing: border-box;
+  align-items: center;
+  width: 240px;
+  text-decoration: none;
+}
+.sidebar-icon {
+  padding-right: 8px;
+  transform: scale(0.8);
+}
 </style>

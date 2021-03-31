@@ -38,18 +38,6 @@ export default {
 </script>
 
 <style>
-.router-link-exact-active {
-  background-color: #008dbc22;
-}
-.sidebar-link {
-  padding: 0;
-  display: flex;
-  padding: 0.7rem 1.2rem;
-  box-sizing: border-box;
-  align-items: center;
-  width: 240px;
-  text-decoration: none;
-}
 ul {
   position: absolute;
   left: 0;
@@ -59,10 +47,6 @@ ul {
   list-style-type: none;
   border-right: 2px solid #008dbc;
   border-bottom: 2px solid #008dbc;
-}
-.sidebar-icon {
-  padding-right: 8px;
-  transform: scale(0.8);
 }
 
 @media screen and (min-width: 358px) {

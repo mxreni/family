@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <Header @openSideMenu="displaySidemenu" />
+    <Header @openSideMenu="toggleSidemenu" />
     <div class="home-container">
       <div
         class="home-sidebar"
         v-if="showMenu"
       >
-        <Sidebar @closeSide="displaySidemenu" />
+        <Sidebar @closeSide="toggleSidemenu" />
       </div>
       <div class="home-mainbar">
         <router-view></router-view>
@@ -32,6 +32,7 @@ export default {
   setup() {
     const showMenu = ref(false);
     onMounted(() => {
+      console.log("here mounted");
       if (window.innerWidth > 1024) {
         showMenu.value = true;
       }
@@ -43,10 +44,10 @@ export default {
         }
       });
     });
-    const displaySidemenu = () => {
+    const toggleSidemenu = () => {
       showMenu.value = !showMenu.value;
     };
-    return { showMenu, displaySidemenu };
+    return { showMenu, toggleSidemenu };
   },
 };
 </script>

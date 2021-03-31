@@ -10,13 +10,13 @@
     <form>
       <div class="fields">
         <div class="input-field">
-          <label for="email">Email or username</label>
+          <label for="email">Email</label>
           <input
             type="email"
-            name="Email"
+            name="email"
             v-model="email"
-            id="Email"
-            placeholder="Enter your email or username"
+            id="email"
+            placeholder="Enter the email"
           >
         </div>
         <div class="input-field">
@@ -36,25 +36,31 @@
             value="submit"
             :class="{'btn':true,'loading':loading}"
             @click="submit"
-          >
+          />
         </div>
 
         <div class="social">
-          <img
-            src="../../assets/google.svg"
-            alt="google login"
-            class="fa-google icon"
-          >
-          <img
-            src="../../assets/facebook.svg"
-            alt="facebook login"
-            class="fa-facebook icon"
-          >
-          <img
-            src="../../assets/twitter.svg"
-            alt="twitter login"
-            class="fa-twitter icon"
-          >
+          <a href="http://localhost:3000/auth/google">
+            <img
+              src="../../assets/google.svg"
+              alt="google login"
+              class="fa-google icon"
+            >
+          </a>
+          <a href="http://localhost:3000/auth/facebook">
+            <img
+              src="../../assets/facebook.svg"
+              alt="facebook login"
+              class="fa-facebook icon"
+            >
+          </a>
+          <a href="http://localhost:3000/auth/twitter">
+            <img
+              src="../../assets/twitter.svg"
+              alt="twitter login"
+              class="fa-twitter icon"
+            >
+          </a>
         </div>
         <p class="account-verify">
           Don't have an account?
@@ -78,6 +84,7 @@
 .icon {
   width: 1.5rem;
   height: 1.5rem;
+  cursor: pointer;
 }
 .link {
   text-align: left;
@@ -93,11 +100,13 @@
 <script>
 import { ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
-import { login } from "../../api";
+import { getCurrentUser, login, get } from "../../api";
 import Error from "../../components/Error";
+import Input from "../../components/Fields/Input";
 export default {
   components: {
     Error,
+    Input,
   },
   setup() {
     const errors = ref([]);
@@ -111,9 +120,9 @@ export default {
     const closeMessage = () => {
       message.value = false;
     };
+
     const submit = async (e) => {
       e.preventDefault();
-
       if (email.value === "" || email.value === undefined) {
         errors.value = [...errors.value, "email"];
       }
@@ -124,19 +133,20 @@ export default {
         loading.value = true;
         try {
           const res = await login(email.value, password.value);
-          if (res.status === "success") {
-            router.replace({
-              name: "Home",
-            });
-            loading = false;
+          const data = await getCurrentUser();
+          if (res.status === "success" && data.status === "success") {
+            loading.value = false;
+            router.go("/");
           } else {
             loading.value = false;
           }
         } catch (err) {
+          loading.value = false;
           errorType.value = "error";
           message.value = "Something went wrong.Please try again later";
         }
       } else {
+        loading.value = false;
         const errorMessage =
           errors.value.length >= 2
             ? `Please enter the following missing fields: ${errors.value.slice(

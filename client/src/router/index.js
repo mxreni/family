@@ -14,24 +14,27 @@ import Calendar from "../views/Home/Calendar";
 import FamilyMap from "../views/Home/Location";
 import Gallery from "../views/Home/Gallery";
 
+// global user components
 import AuthLayout from "../Layout/AuthLayout";
+import Settings from "../views/Home/Settings.vue";
 
 // api
 import { getCurrentUser } from "../api";
 
 // authcheck middleware
-// const authCheck = async (to, from, next) => {
-//   const result = await getCurrentUser();
-//   console.log(result);
-//   if (result.status === "success") {
-//     next({
-//       name: "Main",
-//     });
-//   } else {
-//     next();
-//   }
-// };
+const authCheck = async (to, from, next) => {
+  const result = await getCurrentUser();
+  console.log(result);
+  if (result.status === "success") {
+    next({
+      name: "Main",
+    });
+  } else {
+    next();
+  }
+};
 
+// route lists
 const routes = [
   {
     path: "/",
@@ -50,7 +53,7 @@ const routes = [
         component: Login,
       },
     ],
-    // beforeEnter: authCheck,
+    beforeEnter: authCheck,
   },
   {
     path: "/",
@@ -70,7 +73,6 @@ const routes = [
     name: "Members",
     component: Members,
   },
-
   {
     path: "/calendar",
     name: "Calendar",
@@ -94,7 +96,7 @@ const routes = [
   {
     path: "/settings",
     name: "Settings",
-    component: Gallery,
+    component: Settings,
   },
 ];
 

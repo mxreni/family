@@ -135,7 +135,10 @@ export default {
     display: block;
   }
   .nav-bar {
-    padding: 0 2rem 5px;
+    max-width: 1400px;
+    padding: 0 4rem;
+    margin-left: auto;
+    margin-right: auto;
   }
   .nav-brand-right {
     display: flex;
@@ -147,12 +150,6 @@ export default {
   }
   .nav-brand-mobile {
     display: none;
-  }
-  .nav-bar {
-    max-width: 1400px;
-    padding: 0 4rem 5px;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 </style>

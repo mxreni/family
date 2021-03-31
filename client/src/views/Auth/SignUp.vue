@@ -11,34 +11,34 @@
       <div class="fields">
         <div class="name">
           <div class="input-field">
-            <label for="first-name">Firstname</label>
+            <label for="first_name">First name</label>
             <input
               type="text"
-              name="firstname"
+              name="first_name"
               v-model="first_name"
-              id="firstname"
-              placeholder="Enter firstname"
+              id="first_name"
+              placeholder="Enter the first name"
             >
           </div>
           <div class="input-field">
-            <label for="last-name">Lastname</label>
+            <label for="last_name">Last name</label>
             <input
               type="text"
-              name="Lastname"
+              name="last_name"
               v-model="last_name"
-              id="lastname"
-              placeholder="Enter lastname"
+              id="last_name"
+              placeholder="Enter the last name"
             >
           </div>
         </div>
         <div class="input-field">
           <label for="email">Email</label>
           <input
-            type="text"
-            name="Email"
+            type="email"
+            name="email"
             v-model="email"
-            id="Email"
-            placeholder="Enter your email"
+            id="email"
+            placeholder="Enter the email"
           >
         </div>
         <div class="input-field">
@@ -52,13 +52,13 @@
           >
         </div>
         <div class="input-field">
-          <label for="confirm-password">Confirm Password</label>
+          <label for="confirm-password">Confirm password</label>
           <input
             type="password"
-            name="confirm-password"
-            id="confirm-password"
+            name="confirm_password"
             v-model="confirm_password"
-            placeholder="Enter confirm password"
+            id="confirm_password"
+            placeholder="Enter the confirm password"
           >
         </div>
         <div class="input-field btn-container">
@@ -68,7 +68,6 @@
             :class="{'btn':true,'loading':loading}"
           >
         </div>
-
       </div>
       <p class="account-verify">
         Already have an account?
@@ -79,15 +78,16 @@
 </template>
 <script>
 import { ref } from "@vue/reactivity";
-import { useRouter } from "vue-router";
-import { signup } from "../../api";
+import { signup } from "@/api";
 // @ is an alias to /src
-import Error from "../../components/Error";
+import Error from "@/components/Error";
+import Input from "@/components/Fields/Input";
 
 export default {
   name: "Home",
   components: {
     Error,
+    Input,
   },
   setup() {
     const errors = ref([]);
@@ -138,16 +138,17 @@ export default {
           try {
             const data = {
               firstname: first_name.value,
-              lastname: lastname.value,
+              lastname: last_name.value,
               email: email.value,
               password: password.value,
             };
             console.log(data);
             const user = await signup(data);
-            firstname.value = "";
-            lastname.value = "";
+            first_name.value = "";
+            last_name.value = "";
             email.value = "";
             password.value = "";
+            confirm_password.value = "";
             console.log(user);
             if (user.status === "success") {
               errorType.value = "success";

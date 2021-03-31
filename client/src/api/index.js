@@ -2,13 +2,13 @@ import Axios from "axios";
 
 const prodApiURL = "";
 const devApiURL = "http://localhost:3000";
-// const devApiURL = "http://:3000";
 
 const axios = Axios.create({
   withCredentials: true,
   baseURL: devApiURL,
   headers: {
     "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
   },
 });
 
@@ -54,6 +54,25 @@ export const getCurrentUser = async () => {
   try {
     const result = await axios.get();
     return { ...result.data, status: "success" };
+  } catch (err) {
+    return err.response.data;
+  }
+};
+
+export const post = async (url, data) => {
+  try {
+    const res = await axios.post(url, data);
+    return res.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};
+
+export const get = async (url) => {
+  try {
+    const res = await axios.get(url);
+    console.log(res);
+    return res.data;
   } catch (err) {
     return err.response.data;
   }

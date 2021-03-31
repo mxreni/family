@@ -1,47 +1,33 @@
 <template>
-  <div
-    class="form-modal-container"
-    v-if="openFormModal"
-    @open="displayForm"
-  >
+  <div class="form-modal-container">
     <div class="form-header">
       <h1 class="form-header-title">Add member</h1>
-      <p @click="closeForm">x</p>
+      <img
+        src="../assets/icons/close.svg"
+        class="close"
+        alt="close-icon"
+        @click="closeForm"
+      />
     </div>
     <div class="form-body">
       <h6 class="form-body-title">Basic information</h6>
       <div class="name">
-        <div class="input-field">
-          <label for="first-name">Firstname</label>
-          <input
-            type="text"
-            name="firstname"
-            v-model="first_name"
-            id="firstname"
-            placeholder="Enter firstname"
-          >
-        </div>
-        <div class="input-field">
-          <label for="last-name">Lastname</label>
-          <input
-            type="text"
-            name="Lastname"
-            v-model="last_name"
-            id="lastname"
-            placeholder="Enter lastname"
-          >
-        </div>
-      </div>
-      <div class="input-field">
-        <label for="email">Email</label>
-        <input
+        <Input
           type="text"
-          name="Email"
-          v-model="email"
-          id="Email"
-          placeholder="Enter your email"
-        >
+          title="Firstname"
+          :value="firstname"
+        />
+        <Input
+          type="text"
+          title="Lastname"
+          :value="lastname"
+        />
       </div>
+      <Input
+        type="email"
+        title="Email"
+        :value="email"
+      />
       <div class="name">
         <div class="input-field">
           <label for="first-name">Gender</label>
@@ -50,32 +36,22 @@
             id="Gender"
           >
             <option value="">select</option>
-            <option value="male">male</option>
-            <option value="female">female</option>
-            <option value="other">other</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
           </select>
         </div>
-        <div class="input-field">
-          <label for="last-name">Date of birth</label>
-          <input
-            type="text"
-            name="Lastname"
-            v-model="last_name"
-            id="lastname"
-            placeholder="Enter lastname"
-          >
-        </div>
+        <Input
+          type="date"
+          title="Date of Birth"
+          :value="dob"
+        />
       </div>
-      <div class="input-field">
-        <label for="phone">Phone</label>
-        <input
-          type="text"
-          name="Phone"
-          v-model="phone"
-          id="Phone"
-          placeholder="Enter phone"
-        >
-      </div>
+      <Input
+        type="tel"
+        title="Phone"
+        :value="phone"
+      />
       <div class="input-field">
         <label for="first-name">Relationship</label>
         <select
@@ -86,11 +62,23 @@
         </select>
       </div>
       <div>
-        <img
-          src="../assets/icons/change_image.png"
-          alt="change_image"
-          class="change-image"
+        <div
+          class="file-button"
+          @click="openFileUploader"
         >
+          <img
+            src="../assets/icons/change_image.png"
+            alt="change_image"
+            class="change-image"
+          >
+        </div>
+        <input
+          type="file"
+          hidden
+          id="file"
+          class="file"
+          name="file"
+        />
       </div>
       <div class="input-field btn-container form-modal-button">
         <input
@@ -104,21 +92,37 @@
 </template>
 
 <script>
+import Input from "./Fields/Input";
 import { ref } from "@vue/reactivity";
 export default {
-  setup() {
-    const openFormModal = ref(false);
-    const displayForm = () => {
-      console.log("here");
-      openFormModal.value = true;
+  components: {
+    Input,
+  },
+  setup(props, { emit }) {
+    const firstname = ref("");
+    const lastname = ref("");
+    const phone = ref("");
+    const email = ref("");
+    const dob = ref("");
+    const loading = ref("");
+
+    const openFileUploader = () => {
+      const fileEL = document.getElementById("file");
+      fileEL.click();
     };
+
     const closeForm = () => {
-      openFormModal.value = false;
+      emit("toggleFormModal");
     };
     return {
-      openFormModal,
-      displayForm,
+      dob,
       closeForm,
+      firstname,
+      lastname,
+      openFileUploader,
+      phone,
+      loading,
+      email,
     };
   },
 };
@@ -129,6 +133,9 @@ export default {
   background-attachment: #fff;
   padding: 0 2.7rem;
 }
+.close-icon {
+  padding-left: 10px;
+}
 .form-header {
   display: flex;
   justify-content: space-between;
@@ -138,6 +145,11 @@ export default {
 .form-header-title {
   font-size: 1rem;
   color: #008bdc;
+}
+.file-button {
+  outline: none;
+  background: transparent;
+  border: none;
 }
 .form-body-title {
   text-align: left;
@@ -150,6 +162,7 @@ select {
 .change-image {
   width: 130px;
   height: 130px;
+  cursor: pointer;
   margin-top: 1.2rem;
 }
 .form-modal-button {

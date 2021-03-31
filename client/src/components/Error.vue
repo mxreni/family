@@ -3,11 +3,12 @@
     :class="{'error':true,'success': success}"
     v-if="message"
   >
-    <p
-      class="
-    close"
+    <img
+      src="../assets/icons/close.svg"
+      class="close"
+      alt="close-icon"
       @click="closeMessage"
-    >X</p>
+    />
     <p>{{message}}</p>
   </div>
 </template>
@@ -52,9 +53,9 @@ export default {
   color: #16a085;
 }
 .close {
-  font-weight: bold;
-  font-size: 0.9rem;
-  margin: 0 5px 0 -10px;
+  margin: 0 -25px 0;
   cursor: pointer;
+  width: 1.2rem;
+  height: 1.2rem;
 }
 </style>
