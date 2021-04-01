@@ -73,7 +73,7 @@ export default {
     height: 92vh;
   }
   .home-sidebar {
-    height: 90%;
+    height:90%;
     float: left;
     display: block;
     width: 250px;
@@ -81,7 +81,7 @@ export default {
   .home-mainbar {
     float: right;
     width: calc(100% - 251px);
-    min-height: 97vh;
+    /* min-height: 100vh; */
     border-left: 0.8px solid #008dbc55;
   }
 }

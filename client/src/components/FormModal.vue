@@ -1,5 +1,9 @@
 <template>
-  <div class="form-modal-container">
+  <form
+    class="form-modal-container"
+    @submit.prevent="submit"
+    enctype="multipart/form-data"
+  >
     <div class="form-header">
       <h1 class="form-header-title">Add member</h1>
       <img
@@ -12,27 +16,43 @@
     <div class="form-body">
       <h6 class="form-body-title">Basic information</h6>
       <div class="name">
-        <Input
-          type="text"
-          title="Firstname"
-          :value="firstname"
-        />
-        <Input
-          type="text"
-          title="Lastname"
-          :value="lastname"
-        />
+        <div class="input-field">
+          <label for="first_name">First name</label>
+          <input
+            type="text"
+            name="firstname"
+            v-model="firstname"
+            id="firstname"
+            placeholder="Enter the first name"
+          >
+        </div>
+        <div class="input-field">
+          <label for="last_name">Last name</label>
+          <input
+            type="text"
+            name="lastname"
+            v-model="lastname"
+            id="lastname"
+            placeholder="Enter the last name"
+          >
+        </div>
       </div>
-      <Input
-        type="email"
-        title="Email"
-        :value="email"
-      />
+      <div class="input-field">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          name="email"
+          v-model="email"
+          id="email"
+          placeholder="Enter the email"
+        >
+      </div>
       <div class="name">
         <div class="input-field">
           <label for="first-name">Gender</label>
           <select
             name="gender"
+            v-model="gender"
             id="Gender"
           >
             <option value="">select</option>
@@ -41,24 +61,38 @@
             <option value="other">Other</option>
           </select>
         </div>
-        <Input
-          type="date"
-          title="Date of Birth"
-          :value="dob"
-        />
+        <div class="input-field">
+          <label for="date">Date of Birth</label>
+          <input
+            type="date"
+            name="date"
+            v-model="dob"
+            id="date"
+          />
+        </div>
       </div>
-      <Input
-        type="tel"
-        title="Phone"
-        :value="phone"
-      />
       <div class="input-field">
-        <label for="first-name">Relationship</label>
-        <select
-          name="gender"
-          id="Gender"
+        <label for="phone">Phone</label>
+        <input
+          type="tel"
+          name="phone"
+          v-model="phone"
+          id="phone"
+          placeholder="Enter the phone number"
         >
-          <option value="">select</option>
+      </div>
+      <div class="input-field">
+        <label for="relationship">Relationship</label>
+        <select
+          name="relationship"
+          id="relationship"
+          v-model="relationship"
+        >
+          <option
+            v-for="relation in relationships"
+            :key="relation.id"
+            :value="relation.id"
+          >{{relation.name}}</option>
         </select>
       </div>
       <div>
@@ -67,7 +101,7 @@
           @click="openFileUploader"
         >
           <img
-            src="../assets/icons/change_image.png"
+            :src="image ? image: require('../assets/icons/change_image.png')"
             alt="change_image"
             class="change-image"
           >
@@ -76,39 +110,72 @@
           type="file"
           hidden
           id="file"
+          accept="image/*"
           class="file"
           name="file"
+          @change="updateImage"
         />
       </div>
-      <div class="input-field btn-container form-modal-button">
-        <input
-          type="submit"
-          value="save"
-          :class="{'btn':true,'loading':loading}"
-        >
-      </div>
     </div>
-  </div>
+    <div class="input-field btn-container form-modal-button">
+      <input
+        type="submit"
+        value="save"
+        :class="{'btn':true,'loading':loading}"
+      >
+    </div>
+  </form>
 </template>
 
 <script>
-import Input from "./Fields/Input";
 import { ref } from "@vue/reactivity";
+import { post, get } from "../api/index";
+import { onMounted } from "@vue/runtime-core";
 export default {
-  components: {
-    Input,
-  },
+  components: {},
   setup(props, { emit }) {
     const firstname = ref("");
     const lastname = ref("");
     const phone = ref("");
+    const gender = ref(null);
     const email = ref("");
     const dob = ref("");
     const loading = ref("");
+    const relationship = ref("");
+    const image = ref(null);
+    const file = ref(null);
+    const relationships = ref([]);
+
+    onMounted(async () => {
+      const data = await get("relationship");
+      relationships.value = data.relationships;
+    });
 
     const openFileUploader = () => {
       const fileEL = document.getElementById("file");
       fileEL.click();
+    };
+
+    const updateImage = (ev) => {
+      image.value = URL.createObjectURL(ev.target.files[0]);
+      file.value = ev.target.files[0];
+    };
+
+    const submit = async (ev) => {
+      ev.preventDefault();
+      console.log(ev.target.form);
+      const data = new FormData();
+      data.append("file", file.value);
+      data.append("firstname", firstname.value);
+      data.append("lastname", lastname.value);
+      data.append("phone", phone.value);
+      data.append("email", email.value);
+      data.append("dob", dob.value);
+      data.append("gender", gender.value);
+      data.append("relationship", relationship.value);
+      console.log(data);
+      const res = await post("/members", data);
+      console.log(res);
     };
 
     const closeForm = () => {
@@ -119,8 +186,15 @@ export default {
       closeForm,
       firstname,
       lastname,
+      file,
+      submit,
+      relationship,
+      gender,
+      relationships,
+      updateImage,
       openFileUploader,
       phone,
+      image,
       loading,
       email,
     };
@@ -136,6 +210,7 @@ export default {
 .close-icon {
   padding-left: 10px;
 }
+
 .form-header {
   display: flex;
   justify-content: space-between;
@@ -154,16 +229,16 @@ export default {
 .form-body-title {
   text-align: left;
   padding: 1.5rem 0.4rem 1.2rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 select {
   background: #fff;
 }
 .change-image {
-  width: 130px;
-  height: 130px;
+  width: 180px;
+  height: 180px;
   cursor: pointer;
-  margin-top: 1.2rem;
+  margin: 2rem auto 1.6rem;
 }
 .form-modal-button {
   display: grid;

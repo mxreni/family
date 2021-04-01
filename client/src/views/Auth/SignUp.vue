@@ -81,13 +81,11 @@ import { ref } from "@vue/reactivity";
 import { signup } from "@/api";
 // @ is an alias to /src
 import Error from "@/components/Error";
-import Input from "@/components/Fields/Input";
 
 export default {
   name: "Home",
   components: {
     Error,
-    Input,
   },
   setup() {
     const errors = ref([]);

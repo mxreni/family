@@ -61,7 +61,12 @@ export const getCurrentUser = async () => {
 
 export const post = async (url, data) => {
   try {
-    const res = await axios.post(url, data);
+    const res = await axios.post(url, data, {
+      headers: {
+        Accept: "multipart/form-data",
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return res.data;
   } catch (err) {
     return err.response.data;
@@ -71,7 +76,6 @@ export const post = async (url, data) => {
 export const get = async (url) => {
   try {
     const res = await axios.get(url);
-    console.log(res);
     return res.data;
   } catch (err) {
     return err.response.data;

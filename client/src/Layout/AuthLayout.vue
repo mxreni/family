@@ -4,7 +4,6 @@
     <div class="section">
       <Sidebar />
       <div class="right">
-        <!-- <slot></slot> -->
         <router-view></router-view>
       </div>
     </div>
@@ -12,7 +11,7 @@
 </template>
 
 <script>
-import { onBeforeMount, onMounted, ref } from "@vue/runtime-core";
+import { onBeforeMount, ref } from "@vue/runtime-core";
 import { getCurrentUser } from "../api";
 import Brand from "../components/Brand";
 import Sidebar from "../components/Auth/Sidebar";

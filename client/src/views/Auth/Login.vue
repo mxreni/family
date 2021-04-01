@@ -102,11 +102,9 @@ import { ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
 import { getCurrentUser, login, get } from "../../api";
 import Error from "../../components/Error";
-import Input from "../../components/Fields/Input";
 export default {
   components: {
     Error,
-    Input,
   },
   setup() {
     const errors = ref([]);

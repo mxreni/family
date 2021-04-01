@@ -1,11 +1,6 @@
 <template>
-  <div class="home-main">
-    <div
-      class="form-modal"
-      v-if="toggleForm"
-    >
-      <FormModal @toggleFormModal="toggleFormModal" />
-    </div>
+<div class="form-modal-backdrop">
+ <div class="home-main">
     <div class="members">
       <div class="main-header">
         <div>
@@ -38,12 +33,20 @@
       <div class="main-body">
         <Card :cards='cards' />
       </div>
-      <div class="main-footer">
+      <div class="main-footer" v-if="!toggleForm">
         <button class="btnn btn-mv disabled">prev</button>
         <button class="btnn btn-mv">next</button>
       </div>
     </div>
   </div>
+    <div
+      class="form-modal"
+      v-if="toggleForm"
+    >
+      <FormModal @toggleFormModal="toggleFormModal" />
+    </div>
+    </div>
+ 
 </template>
 
 <script>
@@ -56,7 +59,7 @@ export default {
     Card,
   },
   setup(props, { emit }) {
-    const cards = ref([23, 243, 54, 32, 2323, 434, 223, 2323, 32]);
+    const cards = ref([23, 243, 54, 32, 2323, 434, 223, 2323, 32,55,44,55]);
     const toggleForm = ref(false);
     const toggleFormModal = () => {
       toggleForm.value = !toggleForm.value;
@@ -73,21 +76,28 @@ export default {
 <style>
 .home-main {
   width: 90%;
-  max-width: 1100px;
+  border: 1px solid red;
   display: flex;
+  
   flex-direction: column;
   margin: 2.7rem auto;
+}
+.form-modal-backdrop {
+  position: relative;
+  width: 100%;
+  /* border: 1px solid red; */
 }
 .form-modal {
   position: absolute;
   right: 0;
   width: 540px;
+  overflow: auto;
   background: #fff;
   display: block;
   z-index: 1;
   overflow: hidden;
-  bottom: -10;
-  top: 70px;
+  bottom: -2.7rem;
+  top: -2.7rem;
   border: 1px solid #008bdc;
 }
 .main-header {
@@ -159,7 +169,7 @@ button {
   display: flex;
   width: 260px;
   justify-content: space-between;
-  margin: 2rem auto;
+  margin: 2rem auto 1rem;
   align-self: center;
 }
 .disabled {
