@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const router = express.Router();
 const passport = require("passport");
 const isAuthenticated = require("../middleware/auth");
+
 // Local Strategy Login
 router.post("/login", passport.authenticate("local"), (req, res) => {
   if (req.user) {
@@ -20,6 +21,7 @@ router.post("/login", passport.authenticate("local"), (req, res) => {
 router.get("/logout", (req, res) => {
   req.logout();
   return res.json({
+    user: req.user,
     status: "success",
     message: "User has been logged out",
   });

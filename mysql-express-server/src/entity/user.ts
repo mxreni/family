@@ -1,4 +1,5 @@
 import { OneToMany } from "typeorm";
+import { Gallery } from "./gallery";
 import { Member } from "./member";
 
 const { Entity, PrimaryGeneratedColumn, Column } = require("typeorm");
@@ -76,4 +77,7 @@ export class User {
 
   @OneToMany((type) => Member, (member) => member.user)
   members: Member[];
+
+  @OneToMany((type) => Gallery, (image) => image.user)
+  images: Gallery[];
 }

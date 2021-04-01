@@ -4,7 +4,7 @@ import { User } from "./user";
 
 @Entity({ name: "Members" })
 export class Member {
-  @PrimaryGeneratedColumn("rowid")
+  @PrimaryGeneratedColumn("increment")
   id: string;
 
   @Column({ name: "firstname", nullable: false })
@@ -15,6 +15,9 @@ export class Member {
 
   @Column({ name: "gender", nullable: false })
   gender: string;
+
+  @Column({ name: "Date Of Birth", type: "date", nullable: true })
+  dob: Date;
 
   @Column("timestamp", {
     name: "createdAt",
@@ -30,7 +33,7 @@ export class Member {
   })
   updatedAt: Date;
 
-  @Column({ type: "varchar", name: "email" })
+  @Column({ type: "varchar", name: "email", unique: true })
   email: string;
 
   @Column({ type: "bigint", name: "phone" })
@@ -38,6 +41,9 @@ export class Member {
 
   @Column({ type: "text", name: "image_url" })
   imageurl: string;
+
+  @Column({ type: "text", nullable: true, name: "about" })
+  about: string;
 
   @ManyToOne((type) => User, (user) => user.members)
   user: User;

@@ -30,6 +30,8 @@ const AuthRoute = require("./routes/auth");
 const SocialAuthRoute = require("./routes/socialAuth");
 const MembersRoute = require("./routes/member");
 
+const RelationshipRoute = require("./routes/relationship");
+
 // route middleware
 const isAuthenticated = require("./middleware/auth");
 
@@ -44,12 +46,17 @@ createConnection(connectionOptions)
 
     //   app initialization
     const app = express();
-    const allowed = ["http://localhost:8080", "https://www.facebook.com"];
-    const corsOptions = {
-      origin: allowed,
-      credentials: true,
-    };
-    app.use(cors(corsOptions));
+    app.use(
+      cors({
+        origin: process.env.clientURI,
+        credentials: true,
+      })
+    );
+    app.use(
+      express.urlencoded({
+        extended: true,
+      })
+    );
     app.use(express.json());
     app.use(morgan("dev"));
     app.use(helmet());
@@ -85,10 +92,11 @@ createConnection(connectionOptions)
 
     app.use("/", AuthRoute);
     app.use("/auth", SocialAuthRoute);
-    app.use("/members", isAuthenticated, MembersRoute);
+    app.use("/members", MembersRoute);
+    app.use("/relationship", isAuthenticated, RelationshipRoute);
 
-    app.listen(3000, function () {
-      console.log("listening on the port", 3000);
+    app.listen(Number(process.env.PORT), function () {
+      console.log("listening on the port", process.env.PORT);
     });
   })
   .catch((err) => {

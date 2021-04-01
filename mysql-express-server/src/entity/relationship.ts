@@ -17,6 +17,7 @@ export class Relationship {
     name: "Name",
     length: 50,
     nullable: false,
+    unique: true,
   })
   name: string;
 
