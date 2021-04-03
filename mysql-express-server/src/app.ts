@@ -22,19 +22,16 @@ const { createConnection } = require("typeorm");
 const connectionOptions = require("./ormconfig");
 require("reflect-metadata");
 import { getRepository } from "typeorm";
-import { TypeormStore } from "connect-typeorm";
-
 // route require
 
 const AuthRoute = require("./routes/auth");
 const SocialAuthRoute = require("./routes/socialAuth");
 const MembersRoute = require("./routes/member");
-
 const RelationshipRoute = require("./routes/relationship");
-
+const usersRoute = require("./routes/user");
 // route middleware
 const isAuthenticated = require("./middleware/auth");
-
+const sessionOptions = require("./utilities/sessionOptions");
 // entity require
 import { Session } from "./entity/session";
 
@@ -63,23 +60,7 @@ createConnection(connectionOptions)
 
     //session setup
 
-    app.use(
-      session({
-        secret: "family-forever",
-        resave: false,
-        store: new TypeormStore({
-          ttl: 864000,
-        }).connect(sessionRepository),
-        saveUninitialized: false,
-        cookie: {
-          path: "/",
-          httpOnly: true,
-          sameSite: "none",
-          secure: false,
-          maxAge: 1000 * 60 * 60 * 24,
-        },
-      })
-    );
+    app.use(session(sessionOptions(sessionRepository)));
 
     //  passport setup
 
@@ -90,11 +71,14 @@ createConnection(connectionOptions)
     googleAuthStrategy();
     twitterAuthStrategy();
 
+    // app level routes
     app.use("/", AuthRoute);
     app.use("/auth", SocialAuthRoute);
-    app.use("/members", MembersRoute);
+    app.use("/members", isAuthenticated, MembersRoute);
     app.use("/relationship", isAuthenticated, RelationshipRoute);
+    app.use("/users", isAuthenticated, usersRoute);
 
+    // server listening
     app.listen(Number(process.env.PORT), function () {
       console.log("listening on the port", process.env.PORT);
     });

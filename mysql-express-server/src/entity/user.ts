@@ -18,6 +18,13 @@ export class User {
   firstname: string;
 
   @Column({
+    name: "phone",
+    length: 18,
+    nullable: true,
+  })
+  phone: string;
+
+  @Column({
     name: "lastName",
     length: 80,
     nullable: false,
@@ -31,6 +38,16 @@ export class User {
     unique: true,
   })
   username: string;
+
+  @Column({ name: "Date Of Birth", type: "date", nullable: true })
+  dob: Date;
+
+  @Column({
+    name: "gender",
+    length: 10,
+    nullable: true,
+  })
+  gender: string;
 
   @Column({
     name: "email",
