@@ -1,5 +1,17 @@
 <template>
-  <div class="home">
+  <div
+    class="alert-service"
+    v-if="showModal"
+  >
+    <Modal
+      @showModal="showModal=!showModal"
+      :modalMessage="modalMessage"
+    />
+  </div>
+  <div
+    class="home"
+    :style="showModal ? {height:'calc(100vh)', overflow:'hidden'} : {height: auto}"
+  >
     <Header @openSideMenu="toggleSidemenu" />
     <div class="home-container">
       <div
@@ -20,19 +32,30 @@
 </template>
 
 <script>
-import { onMounted, onUpdated, ref } from "@vue/runtime-core";
+import {
+  getCurrentInstance,
+  onMounted,
+  onUpdated,
+  ref,
+} from "@vue/runtime-core";
 import Header from "../../components/App/Header";
 import Sidebar from "../../components/App/Sidebar";
+import Modal from "../../components/App/Modal";
 
 export default {
   components: {
     Header,
     Sidebar,
+    Modal,
   },
   setup() {
+    const appInstance = getCurrentInstance();
+    const eventBus =
+      appInstance.appContext.app.config.globalProperties.eventBus;
     const showMenu = ref(false);
+    const showModal = ref(true);
+    const modalMessage = ref(null);
     onMounted(() => {
-      console.log("here mounted");
       if (window.innerWidth > 1024) {
         showMenu.value = true;
       }
@@ -43,16 +66,24 @@ export default {
           showMenu.value = false;
         }
       });
+      eventBus.on("showModal", (args) => {
+        showModal.value = true;
+        modalMessage.value = args;
+      });
     });
     const toggleSidemenu = () => {
       showMenu.value = !showMenu.value;
     };
-    return { showMenu, toggleSidemenu };
+    return { showMenu, toggleSidemenu, showModal, modalMessage };
   },
 };
 </script>
 
 <style>
+.alert-service {
+  position: absolute;
+  z-index: 2;
+}
 @media screen and (min-width: 658px) {
   .home-container {
     width: 100%;
@@ -66,6 +97,10 @@ export default {
   }
 }
 @media screen and (min-width: 1024px) {
+  body {
+    overflow: auto;
+    overflow-x: hidden;
+  }
   .home-container {
     width: 100%;
     max-width: 1300px;
@@ -73,7 +108,7 @@ export default {
     height: 92vh;
   }
   .home-sidebar {
-    height:90%;
+    height: 90%;
     float: left;
     display: block;
     width: 250px;
@@ -81,7 +116,7 @@ export default {
   .home-mainbar {
     float: right;
     width: calc(100% - 251px);
-    /* min-height: 100vh; */
+    min-height: calc(100vh - 70px);
     border-left: 0.8px solid #008dbc55;
   }
 }

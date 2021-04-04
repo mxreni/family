@@ -1,19 +1,27 @@
-2. family members crud operations
-3. user settings
 4. view user or member profile
-5. image upload
-6. gallery
+5. gallery
+
+---
 
 ## to be done
----
-7. vuex setup
-9. image upload setup
+
 10. location table
-11. change form modal view 
 
+===================================Event related==========================
+// one member can have multiple events
+// common events like easter wishes to everyone
+// member events
+// common events
+// schedule messsages
+=========================================================================
 
-// one member can have multiple events 
-// common events like easter wishes to everyone 
-// member events 
-// common events 
-// schedule messsages 
+===================Five Defects================================
+22 . username does not get updated
+
+19. form modal change
+20. user settings-delete function
+21. full name problem in members
+22. mainbar line
+23. card design
+24. table view
+25. mapactions and mapstate

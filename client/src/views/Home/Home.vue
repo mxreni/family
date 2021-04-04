@@ -1,7 +1,8 @@
-//    v-if="userLogged && first_name"
- 
-<template>
-  <div class="container">
+ <template>
+  <div
+    class="container"
+    v-if="userLogged && first_name"
+  >
     <p> Logged in successfully <router-link
         @click="logOut"
         class="user-name log-out"
@@ -15,33 +16,27 @@
 
 <script>
 import { ref } from "@vue/reactivity";
-import { useRouter } from "vue-router";
-import { onMounted } from "@vue/runtime-core";
-import { getCurrentUser, logout } from "../../api";
+import { computed, onMounted, watch } from "@vue/runtime-core";
+import { useStore } from "vuex";
+
 export default {
   setup() {
-    const first_name = ref("");
-    const last_name = ref("");
-    const user_name = ref("");
     const userLogged = ref(false);
-    const router = useRouter();
+    const store = useStore();
 
     const logOut = async () => {
-      const res = await logout();
-      console.log(res);
-      if (res.data.status === "success") {
+      await store.dispatch("auth/userLogout");
+      if (store.state.auth.loggedin === false) {
         userLogged.value = false;
       }
     };
 
+    const first_name = computed(() => store.state.auth.currentUser.firstname);
+    const last_name = computed(() => store.state.auth.currentUser.lastname);
+    const user_name = computed(() => store.state.auth.currentUser.username);
     onMounted(async () => {
-      const data = await getCurrentUser();
-      console.log("data");
-      if (data.status === "success") {
+      if (store.state.auth.loggedin) {
         userLogged.value = true;
-        first_name.value = data.firstname;
-        last_name.value = data.lastname;
-        user_name.value = data.username;
       }
     });
 

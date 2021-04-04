@@ -64,6 +64,17 @@ export default {
   }
 }
 
+/* TO FIX */
+@media screen and (max-height: 678px) {
+  .main {
+    height: 628px;
+  }
+
+  .section {
+    height: 628px;
+  }
+}
+
 @media screen and (min-width: 1024px) {
   .main {
     width: 920px;
@@ -88,17 +99,6 @@ export default {
     margin: 1rem 0 0.2rem;
     width: 13rem;
     height: 13rem;
-  }
-}
-
-@media screen and (max-height: 678px) {
-  .main {
-    height: 628px;
-  }
-
-  .section {
-    height: 628px;
-    padding-bottom: 3rem;
   }
 }
 </style>

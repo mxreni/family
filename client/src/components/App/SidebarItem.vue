@@ -29,7 +29,8 @@ export default {
 </script>
 
 <style>
-.router-link-exact-active {
+.router-link-exact-active,
+.router-link-active {
   background-color: #008dbc22;
 }
 .sidebar-link {

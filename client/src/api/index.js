@@ -1,7 +1,7 @@
 import Axios from "axios";
 
 const prodApiURL = "";
-const devApiURL = "http://localhost:3000";
+export const devApiURL = "http://localhost:3000";
 
 const axios = Axios.create({
   withCredentials: true,
@@ -43,7 +43,7 @@ export const signup = async (data) => {
 
 export const logout = async () => {
   try {
-    const result = await axios.get(`logout`);
+    const result = await axios.get("logout");
     return result;
   } catch (err) {
     return err.response.data;
@@ -62,6 +62,20 @@ export const getCurrentUser = async () => {
 export const post = async (url, data) => {
   try {
     const res = await axios.post(url, data, {
+      headers: {
+        Accept: "multipart/form-data",
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};
+
+export const put = async (url, data) => {
+  try {
+    const res = await axios.put(url, data, {
       headers: {
         Accept: "multipart/form-data",
         "Content-Type": "multipart/form-data",

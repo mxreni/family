@@ -55,7 +55,10 @@
             v-model="gender"
             id="Gender"
           >
-            <option value="">select</option>
+            <option
+              value=""
+              selected
+            >select</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="other">Other</option>
@@ -88,6 +91,10 @@
           id="relationship"
           v-model="relationship"
         >
+          <option
+            selected
+            value=""
+          >select</option>
           <option
             v-for="relation in relationships"
             :key="relation.id"
@@ -129,12 +136,24 @@
 
 <script>
 import { ref } from "@vue/reactivity";
-import { post, get } from "../api/index";
-import { onMounted } from "@vue/runtime-core";
+import { devApiURL, put } from "../api/index";
+import {
+  getCurrentInstance,
+  onMounted,
+  watch,
+  watchEffect,
+} from "@vue/runtime-core";
+import { useStore } from "vuex";
 export default {
   components: {},
+  props: ["id"],
   setup(props, { emit }) {
+    const appInstance = getCurrentInstance();
+    const eventBus =
+      appInstance.appContext.app.config.globalProperties.eventBus;
+
     const firstname = ref("");
+    const store = useStore();
     const lastname = ref("");
     const phone = ref("");
     const gender = ref(null);
@@ -147,8 +166,21 @@ export default {
     const relationships = ref([]);
 
     onMounted(async () => {
-      const data = await get("relationship");
-      relationships.value = data.relationships;
+      console.log(props.id);
+      await store.dispatch("relationship/getRelationshipData");
+      relationships.value = store.state.relationship.relationships;
+      if (Number(props.id)) {
+        await store.dispatch("member/getMemberDataById", props.id);
+        const member = store.state.member.member;
+        console.log(member);
+        firstname.value = member.firstname;
+        lastname.value = member.lastname;
+        gender.value = member.gender;
+        dob.value = member.dob;
+        phone.value = member.phone;
+        email.value = member.email;
+        image.value = `${devApiURL}/members/${member.id}/${member.imageurl}`;
+      }
     });
 
     const openFileUploader = () => {
@@ -163,7 +195,7 @@ export default {
 
     const submit = async (ev) => {
       ev.preventDefault();
-      console.log(ev.target.form);
+      const id = Number(props.id);
       const data = new FormData();
       data.append("file", file.value);
       data.append("firstname", firstname.value);
@@ -173,13 +205,29 @@ export default {
       data.append("dob", dob.value);
       data.append("gender", gender.value);
       data.append("relationship", relationship.value);
-      console.log(data);
-      const res = await post("/members", data);
-      console.log(res);
+      const res = id
+        ? await store.dispatch(`member/editMemberDataById`, {
+            ...data,
+            id: props.id,
+          })
+        : await store.dispatch("member/addMemberData", data);
+      file.value = "";
+      closeForm();
+      if (id) {
+        eventBus.emit("showModal", {
+          title: "Success",
+          message: "Data updated successfully",
+        });
+      } else {
+        eventBus.emit("showModal", {
+          title: "Success",
+          message: "Data added successfully",
+        });
+      }
     };
 
     const closeForm = () => {
-      emit("toggleFormModal");
+      emit("closeFormModal");
     };
     return {
       dob,
@@ -237,8 +285,10 @@ select {
 .change-image {
   width: 180px;
   height: 180px;
+  border-radius: 10px;
+  border: 1px solid #008dbc22;
   cursor: pointer;
-  margin: 2rem auto 1.6rem;
+  margin: 2rem auto 1rem;
 }
 .form-modal-button {
   display: grid;

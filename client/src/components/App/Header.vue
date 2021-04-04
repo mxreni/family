@@ -34,14 +34,17 @@
 <script>
 import { ref } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";
-import { getCurrentUser } from "../../api";
+import { useStore } from "vuex";
+
 export default {
   name: "Header",
+
   setup(props, { emit }) {
     const first_name = ref("");
+    const store = useStore();
 
     onMounted(async () => {
-      const data = await getCurrentUser();
+      const data = store.state.auth.currentUser;
       if (data.status === "success") {
         first_name.value = data.firstname;
       }

@@ -1,13 +1,13 @@
 <template>
   <!-- <Main v-if="userLogged" /> -->
-  <Main v-if="userLogged" />
+  <Main v-if="$store.state.auth.loggedin" />
   <router-view name="Auth"></router-view>
 </template>
 
 <script>
 // life cycle hook
 import { computed, onMounted, ref, watchEffect } from "@vue/runtime-core";
-
+import { useStore } from "vuex";
 // components
 import Brand from "./components/Brand";
 import Sidebar from "./components/Auth/Sidebar";
@@ -15,7 +15,6 @@ import Main from "./views/Home/Main";
 import AuthLayout from "./Layout/AuthLayout";
 
 import { mapState, mapActions } from "vuex";
-import { getCurrentUser } from "./api";
 import { useRouter } from "vue-router";
 
 export default {
@@ -27,16 +26,15 @@ export default {
     Main,
   },
   setup() {
-    const userLogged = ref(false);
     const router = useRouter();
-    const dummy = ref(true);
+    const store = useStore();
+
+    const userLogged = computed(() => store.state.auth.loggedin);
 
     onMounted(async () => {
-      const result = await getCurrentUser();
-      console.log(result);
-      if (result.status === "success") {
-        userLogged.value = true;
-      } else {
+      console.log(store);
+      await store.dispatch("auth/getCurrentUserData");
+      if (!store.state.auth.loggedin) {
         userLogged.value = false;
         router.replace({
           name: "Login",
@@ -46,7 +44,6 @@ export default {
 
     return {
       userLogged,
-      dummy,
     };
   },
 };
@@ -69,12 +66,6 @@ export default {
   text-align: center;
   color: #2c3e50;
   min-height: 100vh;
-}
-
-@media screen and (min-width: 1024px) {
-  body {
-    overflow: auto;
-  }
 }
 </style>
   

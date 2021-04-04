@@ -33,8 +33,8 @@ const actions = {
     commit(GET_MEMBER_BY_ID, member);
   },
   async editMemberDataById({ commit }, memberdata) {
-    const { member } = await put(`/members/${member.id}`, memberdata);
-    member.imagedata = imageUrl(member);
+    const { member } = await put(`/members/${memberdata.id}`, memberdata);
+    member.imagedata = imageUrl(memberdata);
     commit(EDIT_MEMBER_BY_ID, member);
   },
 };

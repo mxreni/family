@@ -44,6 +44,7 @@ ul {
   top: 0;
   z-index: 1;
   background: #fff;
+  height: 100vh;
   list-style-type: none;
   border-right: 2px solid #008dbc;
   border-bottom: 2px solid #008dbc;
@@ -68,6 +69,7 @@ ul {
     display: flex;
     padding: 0.7rem 1.2rem;
     box-sizing: border-box;
+    height: auto;
     align-items: center;
     width: 100%;
     text-decoration: none;
