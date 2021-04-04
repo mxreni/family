@@ -31,6 +31,7 @@ export const MemberById = async function (req, res, next) {
       where: {
         id,
       },
+      relations: ["user", "relationship"],
     });
     if (!member) {
       return res.status(404).json({
@@ -123,6 +124,30 @@ export const UpdateMember = async function (req, res, next) {
         message: "Unable to process the request",
       });
     }
+  } catch (err) {
+    return res.status(500).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
+export const deleteMemberById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const memberRepository = getRepository(Member);
+    const member = await memberRepository.delete({
+      id,
+    });
+    if (!member) {
+      return res.status(422).json({
+        status: "failed",
+        message: "Unable to delete the member",
+      });
+    }
+    return res
+      .status(204)
+      .json({ member, status: "success", message: "deleted member" });
   } catch (err) {
     return res.status(500).json({
       status: "failed",

@@ -48,36 +48,6 @@ export const UserById = async (req, res, next) => {
   }
 };
 
-export const CurrentUser = async function (req, res, next) {
-  console.log(req.user.id);
-  try {
-    console.log(req.user);
-    const { id } = req.user;
-    console.log(req.user);
-    const userRepository = getRepository(User);
-    const user = await userRepository.findOne({
-      where: {
-        id,
-      },
-    });
-    console.log(user);
-    if (!user) {
-      return res.status(404).json({
-        status: "failed",
-        message: "User not found",
-      });
-    } else {
-      return res.status(200).json({ user, status: "success" });
-    }
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      status: "failed",
-      message: err,
-    });
-  }
-};
-
 export const UserPhoto = async (req, res) => {
   try {
     const { bucket, result } = await retrieveOne("Users", {
@@ -130,6 +100,10 @@ export const UpdateUser = async function (req, res, next) {
       },
       updatedUser
     );
+    let userR = await userRepository.findOne({
+      id: req.user.id,
+    });
+    console.log(result);
     if (!result) {
       return res.status(422).json({
         status: "failed",
@@ -137,7 +111,7 @@ export const UpdateUser = async function (req, res, next) {
       });
     }
     return res.status(201).json({
-      user: result,
+      user: userR,
       status: "success",
       message: `Updated ${req.user.id} successfully`,
     });
@@ -146,6 +120,29 @@ export const UpdateUser = async function (req, res, next) {
     return res.status(500).json({
       status: "failed",
       message: "Something went wrong",
+    });
+  }
+};
+
+export const deleteUserBySession = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const userRepository = getRepository(User);
+    const user = await userRepository.delete({
+      id,
+    });
+    if (!user) {
+      return res.status(422).json({
+        status: "failed",
+        message: "Unable to delete the user",
+      });
+    }
+    return res.status(204).json({ user, status: "deleted" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: "failed",
+      message: err,
     });
   }
 };

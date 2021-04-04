@@ -1,10 +1,4 @@
-import {
-  UpdateUser,
-  UserById,
-  UserPhoto,
-  Users,
-  CurrentUser,
-} from "../controller/user";
+import { UpdateUser, UserById, UserPhoto, Users } from "../controller/user";
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
@@ -16,9 +10,7 @@ const upload = multer({
 
 router.get("/", Users);
 
-router.get("/user/:id", UserById);
-
-router.get("/current", CurrentUser);
+router.get("/:id", UserById);
 
 router.get("/:id/:filename", UserPhoto);
 
