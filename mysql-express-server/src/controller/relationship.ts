@@ -40,3 +40,28 @@ export const CreateRelationship = async (req, res) => {
     });
   }
 };
+
+export const RelationshipById = async function (req, res, next) {
+  try {
+    const { id } = req.params;
+    const relationshipRepository = getRepository(Relationship);
+    const relationship = await relationshipRepository.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!relationship) {
+      return res.status(404).json({
+        status: "failed",
+        message: "Relationship not found",
+      });
+    }
+    return res.status(200).json({ relationship, status: "success" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};

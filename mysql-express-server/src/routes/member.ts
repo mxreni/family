@@ -1,6 +1,7 @@
 const storage = require("../utilities/mediaStorage");
 import {
   CreateMember,
+  deleteMemberById,
   MemberById,
   MemberPhoto,
   Members,
@@ -24,5 +25,7 @@ router.get("/:id/:filename", MemberPhoto);
 router.post("/", upload.single("file"), CreateMember);
 
 router.put("/:id", upload.single("file"), UpdateMember);
+
+router.delete("/:id",deleteMemberById)
 
 module.exports = router;

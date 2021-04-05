@@ -67,7 +67,7 @@ export const MemberPhoto = async (req, res) => {
 export const CreateMember = async function (req, res, next) {
   try {
     const memberRepository = getRepository(Member);
-    const member = await memberRepository.create({
+    let member = await memberRepository.create({
       ...req.body,
       imageurl: req.file.filename,
       user: req.user.id,
@@ -104,17 +104,28 @@ export const UpdateMember = async function (req, res, next) {
       lastname: req.body.lastname ? req.body.lastname : member.lastname,
       dob: req.body.dob ? req.body.dob : member.dob,
       gender: req.body.gender ? req.body.gender : member.gender,
+      email: req.body.email ? req.body.email : member.email,
       phone: req.body.phone ? req.body.phone : member.phone,
       updatedAt: new Date().toISOString(),
       imageurl: req.file ? req.file.filename : member.imageurl,
+      relationship: req.body.relationship
+        ? req.body.relationship
+        : member.relationship,
     };
     let result = await memberRepository.update(
       { id: req.params.id },
       updatedMember
     );
+
     if (result) {
+      const member = await memberRepository.find({
+        where: {
+          id: req.params.id,
+        },
+        relations: ["relationship"],
+      });
       return res.status(201).json({
-        member: result,
+        member,
         status: "success",
         message: "Member updated Successfully",
       });
@@ -125,6 +136,7 @@ export const UpdateMember = async function (req, res, next) {
       });
     }
   } catch (err) {
+    console.log(err);
     return res.status(500).json({
       status: "failed",
       message: err,
