@@ -23,5 +23,4 @@
 21. full name problem in members
 22. mainbar line
 23. card design
-24. table view
-25. mapactions and mapstate
+24. mapactions and mapstate

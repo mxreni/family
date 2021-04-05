@@ -95,3 +95,14 @@ export const get = async (url) => {
     return err.response.data;
   }
 };
+
+export const deleteRequest = async (url) => {
+  try {
+    const res = await axios.delete(url);
+    console.log(res);
+    // return res.data;
+  } catch (err) {
+    console.log(err);
+    // return err.response.data;
+  }
+};

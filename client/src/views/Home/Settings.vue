@@ -161,7 +161,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from "@vue/runtime-core";
+import { getCurrentInstance, onMounted, ref } from "@vue/runtime-core";
 import { devApiURL } from "../../api";
 import Modal from "../../components/App/Modal";
 import { useStore } from "vuex";
@@ -182,6 +182,10 @@ export default {
     const username = ref("");
     const image = ref("");
     const file = ref("");
+
+    const appInstance = getCurrentInstance();
+    const eventBus =
+      appInstance.appContext.app.config.globalProperties.eventBus;
 
     onMounted(async () => {
       const user = store.state.auth.currentUser;
@@ -221,6 +225,11 @@ export default {
       data.append("username", username.value);
       await store.dispatch("auth/updateUserData", data);
       file.value = "";
+      eventBus.emit("showModal", {
+        title: "Success",
+        message: "Successfully updated user!",
+        buttonText: "close",
+      });
       loading.value = false;
     };
 

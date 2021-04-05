@@ -53,7 +53,7 @@ export default {
     const eventBus =
       appInstance.appContext.app.config.globalProperties.eventBus;
     const showMenu = ref(false);
-    const showModal = ref(true);
+    const showModal = ref(false);
     const modalMessage = ref(null);
     onMounted(() => {
       if (window.innerWidth > 1024) {

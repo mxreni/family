@@ -5,7 +5,7 @@
     enctype="multipart/form-data"
   >
     <div class="form-header">
-      <h1 class="form-header-title">Add member</h1>
+      <h1 class="form-header-title">{{Number(id) ?`${firstname} ${lastname}` : "Add member"}}</h1>
       <img
         src="../assets/icons/close.svg"
         class="close"
@@ -180,6 +180,23 @@ export default {
         phone.value = member.phone;
         email.value = member.email;
         image.value = `${devApiURL}/members/${member.id}/${member.imageurl}`;
+        relationship.value = member.relationship ? member.relationship.id : 1;
+      }
+    });
+
+    watchEffect(async () => {
+      if (Number(props.id)) {
+        await store.dispatch("member/getMemberDataById", props.id);
+        const member = store.state.member.member;
+        console.log(member);
+        firstname.value = member.firstname;
+        lastname.value = member.lastname;
+        gender.value = member.gender;
+        dob.value = member.dob;
+        phone.value = member.phone;
+        email.value = member.email;
+        image.value = `${devApiURL}/members/${member.id}/${member.imageurl}`;
+        relationship.value = member.relationship ? member.relationship.id : 1;
       }
     });
 
@@ -197,6 +214,9 @@ export default {
       ev.preventDefault();
       const id = Number(props.id);
       const data = new FormData();
+      if (id) {
+        data.append("id", id);
+      }
       data.append("file", file.value);
       data.append("firstname", firstname.value);
       data.append("lastname", lastname.value);
@@ -206,10 +226,7 @@ export default {
       data.append("gender", gender.value);
       data.append("relationship", relationship.value);
       const res = id
-        ? await store.dispatch(`member/editMemberDataById`, {
-            ...data,
-            id: props.id,
-          })
+        ? await store.dispatch(`member/editMemberDataById`, data)
         : await store.dispatch("member/addMemberData", data);
       file.value = "";
       closeForm();
@@ -217,11 +234,13 @@ export default {
         eventBus.emit("showModal", {
           title: "Success",
           message: "Data updated successfully",
+          buttonText: "close",
         });
       } else {
         eventBus.emit("showModal", {
           title: "Success",
           message: "Data added successfully",
+          buttonText: "close",
         });
       }
     };
@@ -266,6 +285,7 @@ export default {
   border-bottom: 0.7px solid #0008;
 }
 .form-header-title {
+  text-transform: capitalize;
   font-size: 1rem;
   color: #008bdc;
 }

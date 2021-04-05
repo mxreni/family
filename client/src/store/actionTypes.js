@@ -9,7 +9,8 @@ export const GET_MEMBERS = "getMembers";
 export const ADD_MEMBERS = "pushMembers";
 export const GET_MEMBER_BY_ID = "getMemberById";
 export const EDIT_MEMBER_BY_ID = "editMemberById";
-export const DELET_MEMBER_BY_ID = "deleteMemberById";
+export const DELETE_MEMBER_BY_ID = "deleteMemberById";
 
 // relationship action types
 export const GET_RELATIONSHIPS = "getRelationships";
+export const GET_RELATIONSHIP_BY_ID = "getRelationshipById";

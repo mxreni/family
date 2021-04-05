@@ -2,16 +2,16 @@
   <div class="backdrop">
     <div class="modal-modal">
       <div class="modal-header">
-        <h4>{{modalMessage ?  modalMessage.title : null }}</h4>
+        <h4>{{modalMessage ?  modalMessage.title : 'Error' }}</h4>
       </div>
       <div class="modal-body">
-        <p>{{modalMessage ? modalMessage.message : null }}</p>
+        <p>{{modalMessage ? modalMessage.message : 'Something went wrong' }}</p>
       </div>
       <div class="modal-footer">
         <button
           class="btn modal-button"
           @click="toggleModal"
-        >Close</button>
+        >{{modalMessage ? modalMessage.buttonText : 'Close' }}</button>
       </div>
     </div>
   </div>
@@ -19,15 +19,19 @@
 
 <script>
 import { onMounted } from "@vue/runtime-core";
+import { useStore } from "vuex";
 export default {
   props: ["modalMessage"],
   setup(props, { emit }) {
-    const toggleModal = () => {
+    const store = useStore();
+    const toggleModal = async () => {
+      if (props.modalMessage.action) {
+        console.log("deleting");
+        await store.dispatch(props.modalMessage.action, props.modalMessage.id);
+      }
       emit("showModal");
     };
-    onMounted(() => {
-      console.log(props.modalMessage);
-    });
+
     return {
       toggleModal,
     };

@@ -1,8 +1,17 @@
 <template>
-  <Cards
-    :cards='cards'
-    v-if="cards"
-  />
+  <div
+    class="main-body"
+    v-if="cards && cards.length > 0"
+  >
+    <Cards :cards='cards' />
+
+  </div>
+  <div
+    v-else
+    class="no-data"
+  >
+    No family members yet . Add some!
+  </div>
 </template>
 
 <script>

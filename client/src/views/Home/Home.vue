@@ -9,7 +9,7 @@
         :to="{name:'Login'}"
       >logout</router-link>
     </p>
-    <p>Hi <span class="user-name">{{first_name}}</span></p>
+    <p>Hi <span class="user-name">{{first_name}} {{last_name}}</span></p>
     <p><span class="user-name">User ID: {{user_name}}</span></p>
   </div>
 </template>

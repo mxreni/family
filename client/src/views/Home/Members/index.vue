@@ -41,12 +41,12 @@
               >Add Member</button>
           </div>
         </div>
-        <div class="main-body">
+        <div class="members-view">
           <router-view></router-view>
         </div>
         <div
           class="main-footer"
-          v-if="!toggleForm"
+          v-if="!toggleForm && $store.state.member.members.length > 0"
         >
           <button class="
           btnn
@@ -131,7 +131,7 @@ export default {
 .icon-active {
   border: 1px solid #008dbc;
   background: #008dbc11;
-  border-radius: 10px;
+  border-radius: 2px;
 }
 .form-modal {
   position: absolute;
@@ -252,6 +252,9 @@ button {
   }
   .main-header-menus button {
     display: flex;
+  }
+  .members-view {
+    min-height: 90vh;
   }
 }
 </style>
