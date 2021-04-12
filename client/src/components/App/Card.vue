@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { getCurrentInstance, onMounted } from "@vue/runtime-core";
+import { getCurrentInstance } from "@vue/runtime-core";
 export default {
   props: ["card"],
   setup(props, { emit }) {
@@ -110,10 +110,4 @@ export default {
     width: 100%;
   }
 }
-
-/* @media screen and (min-width: 1024px) {
-  .card {
-    max-width: 300px;
-  }
-} */
 </style>

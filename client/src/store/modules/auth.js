@@ -1,5 +1,5 @@
-import { getCurrentUser, logout, put } from "../../api";
-import { GET_CURRENT_USER, REMOVE_USER, UPDATE_USER } from "../actionTypes";
+import { getCurrentUser, login, logout, put } from "../../api";
+import { GET_CURRENT_USER, LOGIN_TO_USER_ACCOUNT, REMOVE_USER, UPDATE_USER } from "../actionTypes";
 
 const state = () => ({
   loggedin: false,
@@ -9,7 +9,13 @@ const state = () => ({
 const actions = {
   async getCurrentUserData({ commit }) {
     const user = await getCurrentUser();
+    console.log(user);
     commit(GET_CURRENT_USER, user);
+  },
+  async loginWithUserData({commit}, {email,password}) {
+      const res =  await login(email, password)
+      console.log(res);
+      commit(LOGIN_TO_USER_ACCOUNT,res)
   },
   async userLogout({ commit }) {
     await logout();
@@ -28,6 +34,12 @@ const mutations = {
       state.currentUser = user;
     }
     return state;
+  },
+  [LOGIN_TO_USER_ACCOUNT](state,result) {
+      console.log(result);
+      if(result.status==='success'){
+          state.loggedin = true;
+      }
   },
   [REMOVE_USER](state) {
     state.loggedin = false;

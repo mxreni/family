@@ -2,10 +2,12 @@ import { createStore } from "vuex";
 import auth from "./modules/auth";
 import member from "./modules/member";
 import relationship from "./modules/relationship";
+import tree from "./modules/tree";
 
 const store = createStore({
   modules: {
     auth,
+    tree,
     member,
     relationship,
   },

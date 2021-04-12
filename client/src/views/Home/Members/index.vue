@@ -159,7 +159,7 @@ export default {
 }
 
 .main-header-menus {
-  width: 430px;
+  width: 450px;
   display: flex;
   box-sizing: border-box;
   justify-content: flex-end;

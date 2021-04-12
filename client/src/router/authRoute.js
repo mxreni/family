@@ -8,7 +8,6 @@ import { getCurrentUser } from "../api";
 // authcheck middleware
 const authCheck = async (to, from, next) => {
   const result = await getCurrentUser();
-  console.log(result);
   if (result.status === "success") {
     next({
       name: "Main",

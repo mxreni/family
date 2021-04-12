@@ -10,7 +10,7 @@
   </div>
   <div
     class="home"
-    :style="showModal ? {height:'calc(100vh)', overflow:'hidden'} : {height: auto}"
+    :style="showModal ? {height:'calc(100vh)', overflow:'hidden'} : {height: 'auto'}"
   >
     <Header @openSideMenu="toggleSidemenu" />
     <div class="home-container">
@@ -99,7 +99,7 @@ export default {
 @media screen and (min-width: 1024px) {
   body {
     overflow: auto;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
   }
   .home-container {
     width: 100%;

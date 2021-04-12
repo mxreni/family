@@ -100,8 +100,8 @@
 <script>
 import { ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
-import { getCurrentUser, login, get } from "../../api";
 import Error from "../../components/Error";
+import { useStore } from 'vuex';
 export default {
   components: {
     Error,
@@ -114,6 +114,7 @@ export default {
     const router = useRouter();
     const message = ref("");
     const errorType = ref("error");
+    const store =  useStore();
 
     const closeMessage = () => {
       message.value = false;
@@ -130,9 +131,9 @@ export default {
       if (!errors.value.length) {
         loading.value = true;
         try {
-          const res = await login(email.value, password.value);
-          const data = await getCurrentUser();
-          if (res.status === "success" && data.status === "success") {
+          await store.dispatch('auth/loginWithUserData' , {email: email.value, password:password.value});
+          await store.dispatch('auth/getCurrentUserData');
+          if (store.state.auth.currentUser) {
             loading.value = false;
             router.go("/");
           } else {

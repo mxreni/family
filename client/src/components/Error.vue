@@ -9,7 +9,7 @@
       alt="close-icon"
       @click="closeMessage"
     />
-    <p>{{message}}</p>
+    <p class="status-message">{{message}}</p>
   </div>
 </template>
 
@@ -40,13 +40,16 @@ export default {
   display: flex;
   background: #fab1a055;
   color: #d63031;
-  max-width: 80%;
+  max-width: 97%;
   box-sizing: border-box;
   margin: 1rem auto -10px;
   padding: 10px 30px;
   border-radius: 10px;
   font-size: 0.8rem;
   line-height: 1.4rem;
+}
+.status-message {
+  padding-left: 30px;
 }
 .success {
   background: #1abc9c33;

@@ -24,7 +24,6 @@ export default {
   setup() {
     const userLogged = ref(false);
     onBeforeMount(async () => {
-      console.log("fd");
       const result = await getCurrentUser();
       if (result.data && result.data.status === "success") {
         userLogged.value = true;

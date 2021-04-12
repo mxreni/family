@@ -53,9 +53,10 @@ export default {
 
 <style>
 .container {
+  margin-top: -3rem;
   line-height: 2rem;
   display: grid;
-  height: 85vh;
+  height: 100vh;
   place-content: center;
 }
 .user-name {

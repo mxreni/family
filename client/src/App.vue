@@ -32,9 +32,10 @@ export default {
     const userLogged = computed(() => store.state.auth.loggedin);
 
     onMounted(async () => {
+      console.log(userLogged)
       await store.dispatch("auth/getCurrentUserData");
+      console.log(userLogged.value)
       if (!store.state.auth.loggedin) {
-        userLogged.value = false;
         router.replace({
           name: "Login",
         });
@@ -65,6 +66,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   min-height: 100vh;
+}
+option {
+  height: 1.2rem;
 }
 </style>
   

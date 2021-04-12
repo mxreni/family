@@ -43,15 +43,16 @@ export default {
 .backdrop {
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
   display: grid;
   background: #0002;
   place-content: center;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .modal-modal {
   background: white;
+  overflow: hidden;
   border: 1px solid #008dbc88;
   border-radius: 10px;
 }
