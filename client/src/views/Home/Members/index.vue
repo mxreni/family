@@ -1,9 +1,6 @@
 <template>
   <div class="form-modal-backdrop">
-    <div
-      class="home-main"
-      @toggleFormModal="toggleFormModal"
-    >
+    <div class="home-main" @toggleFormModal="toggleFormModal">
       <div class="members">
         <div class="main-header">
           <div>
@@ -11,34 +8,33 @@
           </div>
           <div class="main-header-menus">
             <router-link
-              :to='{"name": "Members.grid"}'
+              :to="{ name: 'Members.grid' }"
               class="members-icon"
               exact-active-class="icon-active"
-            ><img
+              ><img
                 src="../../../assets/icons/calendar_view_month.svg"
                 alt="calendar-icon"
-              ></router-link>
+            /></router-link>
             <router-link
-              :to='{"name": "Members.table"}'
+              :to="{ name: 'Members.table' }"
               class="members-icon"
               exact-active-class="icon-active"
-            ><img
-                src="../../../assets/icons/view_list.svg"
-                alt="view-list"
-              ></router-link>
-            <button class="btnn spl-btn"><img
+              ><img src="../../../assets/icons/view_list.svg" alt="view-list"
+            /></router-link>
+            <button class="btnn spl-btn">
+              <img
                 src="../../../assets/icons/order_by_light.svg"
                 alt="view-list"
                 class="btn-icon"
-              >OrderBy</button>
-            <button
-              @click="toggleFormModal"
-              class="btnn btn-trns"
-            ><img
+              />OrderBy
+            </button>
+            <button @click="toggleFormModal" class="btnn btn-trns">
+              <img
                 src="../../../assets/icons/add_circle.svg"
                 alt="view-list"
                 class="btn-icon"
-              >Add Member</button>
+              />Add Member
+            </button>
           </div>
         </div>
         <div class="members-view">
@@ -48,25 +44,15 @@
           class="main-footer"
           v-if="!toggleForm && $store.state.member.members.length > 0"
         >
-          <button class="
-          btnn
-          btn-mv
-          disabled">prev</button>
+          <button class="btnn btn-mv disabled">prev</button>
           <button class="btnn btn-mv">next</button>
         </div>
       </div>
     </div>
-    <div
-      class="form-modal"
-      v-if="toggleForm"
-    >
-      <FormModal
-        @closeFormModal="closeFormModal"
-        :id="ids"
-      />
+    <div class="form-modal" v-if="toggleForm">
+      <FormModal @closeFormModal="closeFormModal" :id="ids" />
     </div>
   </div>
-
 </template>
 
 <script>

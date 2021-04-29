@@ -1,30 +1,25 @@
 <template>
   <div class="card-info">
-    <img
-      :src="card.imagedata"
-      alt="user"
-      class="card-image"
-    />
+    <img :src="card.imagedata" alt="user" class="card-image" />
     <div class="card-body">
-      <p class="card-title">{{card.firstname}} {{card.lastname}}</p>
-      <p>Gender: {{card.gender}}</p>
-      <p>DOB: {{card.dob}}</p>
-      <p>{{card.relationship ? card.relationship.name: 'Unknown'}}</p>
+      <p class="card-title">{{ card.firstname }} {{ card.lastname }}</p>
+      <p>Gender: {{ card.gender }}</p>
+      <p>DOB: {{ card.dob }}</p>
+      <p>{{ card.relationship ? card.relationship.name : "Unknown" }}</p>
     </div>
   </div>
   <div class="card-footer">
-    <p>Phone: {{card.phone}}</p>
-    <p>Email: {{card.email.slice(0,15)}}</p>
+    <p>Phone: {{ card.phone }}</p>
+    <p>Email: {{ card.email.slice(0, 15) }}</p>
   </div>
-  <div
-    class="edit"
-    @click="openForm(card.id)"
-  >
-    <div class="edit-icon-contain"><img
-        src="../../assets/icons/edit.svg"
+  <div class="edit" @click="openForm(card.id)">
+    <div class="edit-icon-contain">
+      <img
+        src="../../../assets/icons/edit.svg"
         alt="view-list"
         class="edit-icon"
-      /></div>
+      />
+    </div>
   </div>
 </template>
 

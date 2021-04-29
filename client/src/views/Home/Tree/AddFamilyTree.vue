@@ -1,11 +1,7 @@
 <template>
-  <h3 class="tree-title">Add family Tree</h3>
-  <AddMemberItem 
-    v-if="parent"
-    :id="parent.id"
-    :user="parent"
-    :depth="parent.depth"
-  />
+  <div class="gen-style">
+    <Generation v-if="parent" :parent="parent" :depth="0" :selected="0" />
+  </div>
 </template>
 
 <script>
@@ -13,39 +9,42 @@ import {
   computed,
   getCurrentInstance,
   onMounted,
+  ref,
 } from "@vue/runtime-core";
-import AddMemberItem from "../../../components/App/AddMemberItem";
-import { useStore } from "vuex";
+import { useStore, mapGetters } from "vuex";
+import { v4 } from "uuid";
+
+import Generation from "../../../components/App/Tree/Generation";
 export default {
   components: {
-    AddMemberItem,
+    Generation,
   },
+
   setup() {
+    const store = useStore();
     const appInstance = getCurrentInstance();
     const eventBus =
       appInstance.appContext.app.config.globalProperties.eventBus;
-    const store = useStore();
-    const root = computed(() => {
-      return store.state.tree.tree;
-    });
-    const parent = computed(()=>store.getters["tree/parent"])
-   
+
+    const root = computed(() => store.state.tree.tree);
+    const parent = computed(() => store.getters["tree/parent"]);
+
     onMounted(async () => {
+      // console.log(parents);
+      // parents.value = parents.value.map((a) => a[1].id);
       await store.dispatch("tree/getTreeData", {
-        id: 0,
+        id: v4(),
         name: store.state.auth.currentUser.firstname,
-        depth: 0,
         parent: null,
         children: [],
-        type:'children'
+        type: "children",
       });
-      eventBus.on("addMemberItem", async (payload) => {
-        if (payload.type === "children") {
-          await store.dispatch("tree/addMemberChild", payload);
-        } else {
-          await store.dispatch("tree/addMemberParent", payload);
-        }
-      }); 
+
+      console.log(parent.value);
+
+      eventBus.on("showParent", (args) => {
+        console.log(parent.value.id);
+      });
     });
     return {
       root,
@@ -57,13 +56,21 @@ export default {
 
 <style>
 .tree-title {
-  margin: 2rem 0;
+  margin: 1.5rem 0;
   text-align: left;
   font-size: 1.2rem;
 }
-.tree-save-btn {
-  margin-top: 1rem;
+.fam-1 {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+}
+.li-fam {
+  list-style-type: none;
+  padding-right: 10px;
+  padding: 10px;
+  font-size: 1.2rem;
+}
+.gen-style {
+  margin-top: 2rem;
 }
 </style>

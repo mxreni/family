@@ -10,15 +10,13 @@
       @submit.prevent="submit"
       enctype="multipart/form-data"
     >
-
       <h3 class="form-settings-title">
         <img
           src="../../assets/icons/manage_accounts.svg"
           alt="basic info"
           class="settings-icon"
         />
-        Basic
-        information
+        Basic information
       </h3>
       <div class="form-basic">
         <div class="form-basic-left">
@@ -30,7 +28,7 @@
               v-model="firstname"
               id="firstname"
               placeholder="Enter the first name"
-            >
+            />
           </div>
           <div class="input-field input-field-settings">
             <label for="lastname">Last name</label>
@@ -40,7 +38,7 @@
               v-model="lastname"
               id="lastname"
               placeholder="Enter the last name"
-            >
+            />
           </div>
           <div class="input-field input-field-settings">
             <label for="email">Email</label>
@@ -52,19 +50,18 @@
               v-model="email"
               id="email"
               placeholder="Enter the email"
-            >
+            />
           </div>
         </div>
         <div class="form-basic-right">
-          <div
-            class="file-button"
-            @click="openFileUploader"
-          >
+          <div class="file-button" @click="openFileUploader">
             <img
-              :src="image ? image: require('../../assets/icons/change_image.png')"
+              :src="
+                image ? image : require('../../assets/icons/change_image.png')
+              "
               alt="change_image"
               class="change-image form-settings-image"
-            >
+            />
           </div>
           <input
             type="file"
@@ -80,15 +77,8 @@
       <div class="row-input">
         <div class="input-field input-field-settings">
           <label for="first-name">Gender</label>
-          <select
-            name="gender"
-            v-model="gender"
-            id="Gender"
-          >
-            <option
-              value=""
-              selected
-            >select</option>
+          <select name="gender" v-model="gender" id="Gender">
+            <option value="" selected>select</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="other">Other</option>
@@ -96,12 +86,7 @@
         </div>
         <div class="input-field input-field-settings">
           <label for="date">Date of Birth</label>
-          <input
-            type="date"
-            name="date"
-            v-model="dob"
-            id="date"
-          />
+          <input type="date" name="date" v-model="dob" id="date" />
         </div>
       </div>
       <div class="input-field input-field-settings">
@@ -112,7 +97,7 @@
           v-model="phone"
           id="phone"
           placeholder="Phone"
-        >
+        />
       </div>
       <div class="input-field input-field-settings">
         <label for="username">Username</label>
@@ -122,7 +107,7 @@
           v-model="username"
           id="username"
           placeholder="Username"
-        >
+        />
       </div>
       <div class="input-field input-field-settings">
         <label for="password">Password</label>
@@ -132,14 +117,14 @@
           v-model="password"
           id="password"
           placeholder="Password"
-        >
+        />
       </div>
       <div class="input-field btn-container-settings">
         <input
           type="submit"
           value="save"
-          :class="{'btn':true,'loading':loading}"
-        >
+          :class="{ btn: true, loading: loading }"
+        />
       </div>
       <hr class="divider" />
       <h3 class="form-settings-title">
@@ -150,11 +135,13 @@
         />Account Settings
       </h3>
       <div>
-        <p class="form-settings-text"><img
+        <p class="form-settings-text">
+          <img
             class="settings-icon"
             src="../../assets/icons/delete.svg"
             alt="basic info"
-          />Delete account</p>
+          />Delete account
+        </p>
       </div>
     </form>
   </div>
@@ -163,12 +150,8 @@
 <script>
 import { getCurrentInstance, onMounted, ref } from "@vue/runtime-core";
 import { devApiURL } from "../../api";
-import Modal from "../../components/App/Modal";
 import { useStore } from "vuex";
 export default {
-  components: {
-    Modal,
-  },
   setup() {
     const store = useStore();
     const firstname = ref("");

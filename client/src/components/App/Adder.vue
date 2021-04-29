@@ -1,32 +1,47 @@
 <template>
-  <div
-    class="adder"
-    @click="deleteMember"
-  >
+  <div class="adder" @click="deleteMember">
     <img
       src="../../assets/icons/arrow_drop_down.svg"
       alt="add-member-icon"
+      @click="collapse"
       class="add-member-icon"
-    >
-    <div class="vertical"></div>
-    <div class="divider">
-    </div>
+    />
+    <div
+      class="vertical"
+      :style="
+        children === 0
+          ? { heigth: '75px' }
+          : { height: (children + 1) * 75 + 'px' }
+      "
+    ></div>
+    <div class="divider"></div>
   </div>
 </template>
 
 <script>
-import { ref } from "@vue/runtime-core";
+import { getCurrentInstance, onMounted, ref } from "@vue/runtime-core";
 import Menu from "./Menu";
 export default {
-  props: ["idp"],
+  props: ["idp", "depth", "children"],
   components: {
     Menu,
   },
+
   setup(props) {
+    const appInstance = getCurrentInstance();
+    const eventBus =
+      appInstance.appContext.app.config.globalProperties.eventBus;
+
     const id = ref(props.idp);
 
+    const collapse = () => {
+      eventBus.emit("collapse", {
+        id: id.value,
+      });
+    };
     return {
       id,
+      collapse,
     };
   },
 };
@@ -35,7 +50,7 @@ export default {
 <style>
 .add-member-icon {
   position: absolute;
-  
+
   width: 1rem;
   border-radius: 50%;
   height: 1rem;

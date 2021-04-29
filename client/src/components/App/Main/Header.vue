@@ -2,31 +2,30 @@
   <div class="nav-bar">
     <div class="nav-brand">
       <img
-        src="../../assets/icons/menu.svg"
+        src="../../../assets/icons/menu.svg"
         alt="user"
         @click="openSidebar"
         class="nav-brand nav-brand-mobile nav-icon"
-      >
+      />
       <img
-        src="../../assets/FamLight.svg"
+        src="../../../assets/FamLight.svg"
         alt="logo"
         class="nav-brand-logo"
-      >
+      />
       <h3 class="nav-brand-title">MyFamily</h3>
     </div>
     <div class="nav-brand nav-brand-right">
-      <p class="username">Hi, {{first_name}}</p>
+      <p class="username">Hi, {{ first_name }}</p>
       <img
-        src="../../assets/icons/person-white.svg"
+        src="../../../assets/icons/person-white.svg"
         alt="user"
         class="person nav-icon"
-      >
+      />
       <img
-        src="../../assets/icons/notifications.svg"
+        src="../../../assets/icons/notifications.svg"
         alt="user"
         class="notification nav-icon"
-      >
-
+      />
     </div>
   </div>
 </template>
@@ -45,6 +44,7 @@ export default {
 
     onMounted(async () => {
       const data = store.state.auth.currentUser;
+      console.log(data);
       if (data.status === "success") {
         first_name.value = data.firstname;
       }

@@ -1,9 +1,6 @@
 <template>
   <div class="main-body-table">
-    <table
-      CELLSPACING=0
-      v-if="cards && cards.length > 0"
-    >
+    <table CELLSPACING="0" v-if="cards && cards.length > 0">
       <thead>
         <tr>
           <th>S.No</th>
@@ -15,20 +12,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="(card ,index) in cards"
-          :key="card.id"
-        >
-          <td class="center-td">{{index+1}}</td>
-          <td class="table-name"><img
+        <tr v-for="(card, index) in cards" :key="card.id">
+          <td class="center-td">{{ index + 1 }}</td>
+          <td class="table-name">
+            <img
               :src="card.imagedata"
               :alt="card.firstname"
               class="table-profile-img"
             />
-            {{card.firstname}} {{card.lastname}}</td>
-          <td>{{card.gender}}</td>
-          <td>{{card.dob}}</td>
-          <td>{{card.relationship ? card.relationship.name: 'Unknown'}}</td>
+            {{ card.firstname }} {{ card.lastname }}
+          </td>
+          <td>{{ card.gender }}</td>
+          <td>{{ card.dob }}</td>
+          <td>{{ card.relationship ? card.relationship.name : "Unknown" }}</td>
           <td class="center-td">
             <img
               class="delete-icon"
@@ -40,12 +36,7 @@
         </tr>
       </tbody>
     </table>
-    <div
-      v-else
-      class="no-data"
-    >
-      No family members yet . Add some!
-    </div>
+    <div v-else class="no-data">No family members yet . Add some!</div>
   </div>
 </template>
 

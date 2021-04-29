@@ -17,7 +17,7 @@
             v-model="email"
             id="email"
             placeholder="Enter the email"
-          >
+          />
         </div>
         <div class="input-field">
           <label for="password">Password</label>
@@ -27,14 +27,14 @@
             v-model="password"
             id="password"
             placeholder="Enter password"
-          >
+          />
           <a class="link">Forgot Password?</a>
         </div>
         <div class="input-field btn-container">
           <input
             type="submit"
             value="submit"
-            :class="{'btn':true,'loading':loading}"
+            :class="{ btn: true, loading: loading }"
             @click="submit"
           />
         </div>
@@ -45,27 +45,26 @@
               src="../../assets/google.svg"
               alt="google login"
               class="fa-google icon"
-            >
+            />
           </a>
           <a href="http://localhost:3000/auth/facebook">
             <img
               src="../../assets/facebook.svg"
               alt="facebook login"
               class="fa-facebook icon"
-            >
+            />
           </a>
           <a href="http://localhost:3000/auth/twitter">
             <img
               src="../../assets/twitter.svg"
               alt="twitter login"
               class="fa-twitter icon"
-            >
+            />
           </a>
         </div>
         <p class="account-verify">
           Don't have an account?
-          <router-link :to="{'name': 'Signup'
-          }">Signup</router-link>
+          <router-link :to="{ name: 'Signup' }">Signup</router-link>
         </p>
       </div>
     </form>
@@ -101,7 +100,7 @@
 import { ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
 import Error from "../../components/Error";
-import { useStore } from 'vuex';
+import { useStore } from "vuex";
 export default {
   components: {
     Error,
@@ -114,7 +113,7 @@ export default {
     const router = useRouter();
     const message = ref("");
     const errorType = ref("error");
-    const store =  useStore();
+    const store = useStore();
 
     const closeMessage = () => {
       message.value = false;
@@ -131,8 +130,10 @@ export default {
       if (!errors.value.length) {
         loading.value = true;
         try {
-          await store.dispatch('auth/loginWithUserData' , {email: email.value, password:password.value});
-          await store.dispatch('auth/getCurrentUserData');
+          await store.dispatch("auth/loginWithUserData", {
+            email: email.value,
+            password: password.value,
+          });
           if (store.state.auth.currentUser) {
             loading.value = false;
             router.go("/");

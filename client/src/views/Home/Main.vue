@@ -1,23 +1,18 @@
 <template>
-  <div
-    class="alert-service"
-    v-if="showModal"
-  >
-    <Modal
-      @showModal="showModal=!showModal"
-      :modalMessage="modalMessage"
-    />
+  <div class="alert-service" v-if="showModal">
+    <Modal @showModal="showModal = !showModal" :modalMessage="modalMessage" />
   </div>
   <div
     class="home"
-    :style="showModal ? {height:'calc(100vh)', overflow:'hidden'} : {height: 'auto'}"
+    :style="
+      showModal
+        ? { height: 'calc(100vh)', overflow: 'hidden' }
+        : { height: 'auto' }
+    "
   >
     <Header @openSideMenu="toggleSidemenu" />
     <div class="home-container">
-      <div
-        class="home-sidebar"
-        v-if="showMenu"
-      >
+      <div class="home-sidebar" v-if="showMenu">
         <Sidebar @closeSide="toggleSidemenu" />
       </div>
       <div class="home-mainbar">
@@ -38,9 +33,9 @@ import {
   onUpdated,
   ref,
 } from "@vue/runtime-core";
-import Header from "../../components/App/Header";
-import Sidebar from "../../components/App/Sidebar";
-import Modal from "../../components/App/Modal";
+import Header from "../../components/App/Main/Header";
+import Sidebar from "../../components/App/Main/Sidebar";
+import Modal from "../../components/App/Main/Modal";
 
 export default {
   components: {

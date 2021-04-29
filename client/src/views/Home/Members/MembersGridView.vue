@@ -1,21 +1,12 @@
-<template>
-  <div
-    class="main-body"
-    v-if="cards && cards.length > 0"
-  >
-    <Cards :cards='cards' />
-
+e<template>
+  <div class="main-body" v-if="cards && cards.length > 0">
+    <Cards :cards="cards" />
   </div>
-  <div
-    v-else
-    class="no-data"
-  >
-    No family members yet . Add some!
-  </div>
+  <div v-else class="no-data">No family members yet . Add some!</div>
 </template>
 
 <script>
-import Cards from "@/components/App/Cards";
+import Cards from "../../../components/App/FamilyMembers/Cards";
 import { computed, onMounted } from "@vue/runtime-core";
 import { useStore } from "vuex";
 
