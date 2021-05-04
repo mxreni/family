@@ -7,6 +7,9 @@ const treeRoute = {
   path: "/tree",
   name: "Tree",
   component: Tree,
+  redirect: {
+    name: "Tree.Add",
+  },
   children: [
     {
       path: "",

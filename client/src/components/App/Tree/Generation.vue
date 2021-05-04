@@ -7,18 +7,19 @@
       ref="container"
     >
       <ChildrenView
-        @showChildren="showChildren"
         v-for="(item, index) in Array.isArray(parent) ? parent : [parent]"
+        @showChildren="showChildren"
         :key="index"
         :user="root[item]"
         :userid="root[item].id"
-        :active="sel === index && root[item].children.length"
+        :active="sel === index"
+        :depth="depth"
       />
       <div
         class="arrow left-arrow"
         :style="{ left: -size + 'px' }"
         @click="moveLeft"
-        v-if="parent.length > 3"
+        v-if="parent.length > 0"
       >
         <img
           src="../../../assets/icons/arrow_right.svg"
@@ -29,7 +30,7 @@
       <div
         class="arrow right-arrow"
         @click="moveRight"
-        v-if="parent.length > 3"
+        v-if="parent.length > 0"
       >
         <img
           src="../../../assets/icons/arrow_right.svg"
@@ -47,6 +48,7 @@
 import { computed, onMounted, ref } from "@vue/runtime-core";
 import ChildrenView from "../../../components/App/Tree/ChildrenView";
 import { useStore } from "vuex";
+
 export default {
   components: {
     ChildrenView,
@@ -79,22 +81,8 @@ export default {
     );
 
     const showChildren = (args) => {
-      // in that generation the selected value is 2
-      // in the next generation the selevetd value is not changed it remains the same as the previous selected in that generation
       sel.value = props.parent.indexOf(args.id);
-      // console.log(currentGen.value);
-
-      // console.log(sel.value);
       console.log("depth" + props.depth);
-    };
-
-    const changeSomething = (ev) => {
-      console.log(ev.target.innerText);
-      sel.value = Number(ev.target.innerText);
-      sel.value = props.parent.indexOf(sel.value);
-      // console.log(user.value);
-      console.log("depth" + props.depth);
-      // console.log(userCheck.value);
     };
 
     const moveLeft = () => {
@@ -103,13 +91,13 @@ export default {
       }
     };
     const moveRight = () => {
-      if (size.value > -(props.parent.length - 2) * 250) {
+      if (size.value > -(10 - 2) * 250) {
         size.value += -250;
       }
     };
 
     onMounted(() => {
-      console.log(props.parent + "---->" + props.depth);
+      console.log(props.parent);
     });
 
     const root = computed(() => store.state.tree.tree);
@@ -121,7 +109,6 @@ export default {
       moveRight,
       showChildren,
       size,
-      changeSomething,
       root,
       sel,
     };

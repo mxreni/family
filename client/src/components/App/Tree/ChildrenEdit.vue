@@ -1,5 +1,5 @@
 <template>
-  <div class="child-item-outer">
+  <div :class="{ 'child-item-outer': true }">
     <div class="child-item" @click="showContainer">
       <img src="../../../assets/icons/grid-2.svg" alt="calendar-icon" />
       <div class="sample">
@@ -11,7 +11,6 @@
           <option value="female">Female</option>
           <option value="other">Other</option>
         </select>
-
         <input type="date" name="date" v-model="dob" />
       </div>
     </div>
@@ -23,15 +22,10 @@
 </template>
 
 <script>
-import {
-  getCurrentInstance,
-  onMounted,
-  onUpdated,
-  ref,
-} from "@vue/runtime-core";
+import { getCurrentInstance, onMounted, ref } from "@vue/runtime-core";
 import { useStore } from "vuex";
 export default {
-  props: ["user", "userid"],
+  props: ["user", "userid", "depth"],
   setup(props) {
     const store = useStore();
     const name = ref(props.user.name);
@@ -45,6 +39,10 @@ export default {
       await store.dispatch("tree/removeMemberData", props.user);
     };
 
+    onMounted(() => {
+      console.log(props.user);
+    });
+
     const submit = async () => {
       const data = {
         name: name.value,
@@ -54,6 +52,7 @@ export default {
         gender: "female",
         parentId: props.user.parentId,
         parent: props.user.parent ? props.user.parent.id : null,
+        depth: props.user.type === "parent" ? 1 : 0,
       };
       console.log(data);
       if (name.value !== "") {
@@ -137,5 +136,8 @@ input[type="date"] {
   width: 15px;
   margin-top: 10px;
   height: 15px;
+}
+.partner {
+  background: lightcoral;
 }
 </style>

@@ -1,16 +1,11 @@
 <template>
   <div class="gen-style">
-    <Generation v-if="parent" :parent="parent" :depth="0" :selected="0" />
+    <Generation v-if="parent" :parent="parent" :depth="0" />
   </div>
 </template>
 
 <script>
-import {
-  computed,
-  getCurrentInstance,
-  onMounted,
-  ref,
-} from "@vue/runtime-core";
+import { computed, onMounted, ref } from "@vue/runtime-core";
 import { useStore, mapGetters } from "vuex";
 import { v4 } from "uuid";
 
@@ -22,33 +17,25 @@ export default {
 
   setup() {
     const store = useStore();
-    const appInstance = getCurrentInstance();
-    const eventBus =
-      appInstance.appContext.app.config.globalProperties.eventBus;
-
+    const selected = ref(0);
     const root = computed(() => store.state.tree.tree);
     const parent = computed(() => store.getters["tree/parent"]);
 
     onMounted(async () => {
-      // console.log(parents);
-      // parents.value = parents.value.map((a) => a[1].id);
       await store.dispatch("tree/getTreeData", {
         id: v4(),
         name: store.state.auth.currentUser.firstname,
         parent: null,
+        depth: 0,
         children: [],
         type: "children",
       });
-
       console.log(parent.value);
-
-      eventBus.on("showParent", (args) => {
-        console.log(parent.value.id);
-      });
     });
     return {
       root,
       parent,
+      selected,
     };
   },
 };

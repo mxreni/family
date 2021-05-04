@@ -3,13 +3,15 @@
     v-if="user && user.status !== 'Active'"
     :userid="user.id"
     :user="user"
+    :depth="depth"
   />
   <div
     v-else
     :class="{
       'child-item-outer': true,
       'special-view': true,
-      active: active,
+      active,
+      partner: isPartner,
     }"
   >
     <div>
@@ -28,45 +30,57 @@
       </div>
       <div class="button sample-icon">
         <button class="btn">Edit</button>
-        <button class="btn" @click="showPartner">Partner</button>
-        <button class="btn" @click="showChildren">Children</button>
-        <button class="btn" v-if="user.parent === null" @click="showParent">
+        <button v-if="!isPartner" class="btn" @click="showPartner">
+          Partner
+        </button>
+        <button class="btn" v-if="!isPartner" @click="showChildren">
+          Children
+        </button>
+        <button class="btn" v-if="!user.parent" @click="showParent">
           Parent
         </button>
         <button class="btn" v-else @click="showSibling">Sibling</button>
       </div>
     </div>
   </div>
+  <div class="partner-container">
+    <div v-if="user.partner" class="divider"></div>
+    <ChildrenView
+      v-if="user.partner"
+      :user="user.partner"
+      :userid="user.partner.id"
+      :depth="depth"
+      :isPartner="true"
+    />
+  </div>
 </template>
 
 <script>
 import ChildrenEdit from "./ChildrenEdit";
 
-import { computed, getCurrentInstance, onMounted } from "@vue/runtime-core";
+import { computed, onMounted } from "@vue/runtime-core";
 import { useStore } from "vuex";
 export default {
-  props: ["user", "userid", "active"],
+  props: ["user", "userid", "active", "depth", "isPartner"],
   components: {
     ChildrenEdit,
   },
+  emits: ["showChildren"],
   setup(props, { emit }) {
     const store = useStore();
-    const appInstance = getCurrentInstance();
-    const eventBus =
-      appInstance.appContext.app.config.globalProperties.eventBus;
 
     const showParent = async () => {
+      let depth = props.depth;
+
       await store.dispatch("tree/addMemberParent", {
         id: props.user.id,
       });
-      eventBus.emit("showParent", {
-        res: props.user.id,
-      });
     };
+    const checkParent = computed(() =>
+      store.getters["tree/checkParent"](props.user.id)
+    );
 
-    onMounted(() => {
-      console.log(props.user.partner);
-    });
+    onMounted(() => {});
 
     const showSibling = async () => {
       await store.dispatch("tree/addMemberSibling", { id: props.userid });
@@ -78,6 +92,7 @@ export default {
     };
 
     const showChildren = async () => {
+      console.log(props.user);
       if (props.user.children.length > 0) {
         emit("showChildren", { id: props.userid });
       } else {
@@ -92,6 +107,7 @@ export default {
       showParent,
       showSibling,
       showChildren,
+      checkParent,
       showPartner,
     };
   },
@@ -104,10 +120,20 @@ export default {
   margin-left: -5px;
 }
 
+.partner-container {
+  position: relative;
+}
+
 .divider {
-  width: 10px;
-  height: 1px;
-  border-bottom: 1px solid red;
+  position: absolute;
+  width: 34px;
+  left: -17px;
+  z-index: 0;
+  top: 60px;
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(to bottom right, #f005, #008bdc55);
+  /* border-bottom: 3px solid #008bdc55; */
 }
 
 .child-item-outer {
@@ -139,6 +165,13 @@ export default {
 
 .special-view button {
   margin-bottom: 4px;
+}
+
+.heart {
+  width: 36px;
+  z-index: 1;
+  height: 36px;
+  margin-top: -15px;
 }
 
 .partner button {
