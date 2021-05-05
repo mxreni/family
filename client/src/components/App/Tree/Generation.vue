@@ -56,16 +56,24 @@ export default {
   props: ["depth", "parent", "selected"],
   watch: {
     parent: function (newval, oldval) {
-      console.log(oldval, newval);
+      console.log(oldval, newval, this.depth, this.maya);
       if (newval.length > 0) {
-        this.sel = 0;
-        this.size = 0;
+        if (this.maya && this.depth >= 1 && this.maya[this.depth - 1] >= 0) {
+          this.sel = this.maya[this.depth - 1];
+          console.log(this.sel);
+          this.size = -this.sel * 250;
+        } else {
+          this.sel = 0;
+          this.size = 0;
+        }
       }
     },
   },
   setup(props) {
     const store = useStore();
     const sel = ref(0);
+    const selected = ref(null);
+
     const size = ref(0);
 
     const user = computed(() =>
@@ -74,14 +82,28 @@ export default {
         : root.value[props.parent].children
     );
 
-    const userCheck = computed(() =>
-      Array.isArray(props.parent)
-        ? root.value[props.parent[sel.value]].children.length > 0
-        : root.value[props.parent].children.length > 0
-    );
+    const userCheck = computed(() => {
+      console.log(props.parent, sel.value);
+      if (props.parent) {
+        let res = Array.isArray(props.parent)
+          ? root.value[props.parent[sel.value]].children.length > 0
+          : root.value[props.parent].children.length > 0;
+        if (!res) {
+          res = root.value[props.parent[0]].children.length > 0;
+        }
+        return res;
+      } else {
+        console.log(props.parent);
+      }
+    });
+
+    const maya = computed(() => store.state.tree.parent);
 
     const showChildren = (args) => {
+      maya.value = null;
+      store.dispatch("tree/resetParent");
       sel.value = props.parent.indexOf(args.id);
+      console.log(props.parent.indexOf(args.id));
       console.log("depth" + props.depth);
     };
 
@@ -95,9 +117,11 @@ export default {
         size.value += -250;
       }
     };
-
     onMounted(() => {
-      console.log(props.parent);
+      console.log(maya.value, props.depth);
+      if (maya.value && maya.value[props.depth - 1]) {
+        sel.value = maya.value[props.depth - 1];
+      }
     });
 
     const root = computed(() => store.state.tree.tree);
@@ -107,6 +131,7 @@ export default {
       userCheck,
       moveLeft,
       moveRight,
+      maya,
       showChildren,
       size,
       root,

@@ -43,22 +43,22 @@
       </div>
     </div>
   </div>
-  <div class="partner-container">
-    <div v-if="user.partner" class="divider"></div>
-    <ChildrenView
-      v-if="user.partner"
-      :user="user.partner"
-      :userid="user.partner.id"
-      :depth="depth"
-      :isPartner="true"
-    />
-  </div>
+
+  <!-- <div v-if="user.partner" class="divider"></div> -->
+  <ChildrenView
+    v-if="user.partner"
+    :user="user.partner"
+    :userid="user.partner.id"
+    :depth="depth"
+    :isPartner="true"
+  />
+  <!-- </div> -->
 </template>
 
 <script>
 import ChildrenEdit from "./ChildrenEdit";
 
-import { computed, onMounted } from "@vue/runtime-core";
+import { computed, ref } from "@vue/runtime-core";
 import { useStore } from "vuex";
 export default {
   props: ["user", "userid", "active", "depth", "isPartner"],
@@ -70,8 +70,9 @@ export default {
     const store = useStore();
 
     const showParent = async () => {
+      store.dispatch("tree/removeCurrentTree");
       let depth = props.depth;
-
+      let selected = props.user.id;
       await store.dispatch("tree/addMemberParent", {
         id: props.user.id,
       });
@@ -80,19 +81,19 @@ export default {
       store.getters["tree/checkParent"](props.user.id)
     );
 
-    onMounted(() => {});
-
     const showSibling = async () => {
+      store.dispatch("tree/removeCurrentTree");
+
       await store.dispatch("tree/addMemberSibling", { id: props.userid });
     };
 
     const showPartner = async () => {
-      console.log("partner here");
+      store.dispatch("tree/removeCurrentTree");
       await store.dispatch("tree/addMemberPartner", { id: props.userid });
     };
 
     const showChildren = async () => {
-      console.log(props.user);
+      store.dispatch("tree/removeCurrentTree");
       if (props.user.children.length > 0) {
         emit("showChildren", { id: props.userid });
       } else {

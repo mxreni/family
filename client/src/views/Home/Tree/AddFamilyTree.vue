@@ -17,8 +17,6 @@ export default {
 
   setup() {
     const store = useStore();
-    const selected = ref(0);
-    const root = computed(() => store.state.tree.tree);
     const parent = computed(() => store.getters["tree/parent"]);
 
     onMounted(async () => {
@@ -33,9 +31,7 @@ export default {
       console.log(parent.value);
     });
     return {
-      root,
       parent,
-      selected,
     };
   },
 };
