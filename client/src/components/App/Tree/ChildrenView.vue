@@ -4,6 +4,7 @@
     :userid="user.id"
     :user="user"
     :depth="depth"
+    :partner="isPartner"
   />
   <div
     v-else
@@ -22,8 +23,17 @@
           class="card-image"
         />
         <div class="sample-view">
-          <p class="card-title">{{ user.name || "raelyn shane" }}</p>
-          <p>Gender:{{ user.gender }}</p>
+          <router-link
+            :to="{
+              name: 'Tree.member',
+              params: {
+                memberId: user.id,
+              },
+            }"
+          >
+            <p class="card-title">{{ user.name }}</p>
+          </router-link>
+          <p>Gender:{{ user.gender || "unknown" }}</p>
           <p>DOB: {{ user.dob ? user.dob : "3444-23-23" }}</p>
           <p>{{ "Relationship: Friend" }}</p>
         </div>
@@ -58,7 +68,7 @@
 <script>
 import ChildrenEdit from "./ChildrenEdit";
 
-import { computed, ref } from "@vue/runtime-core";
+import { computed, onMounted, ref } from "@vue/runtime-core";
 import { useStore } from "vuex";
 export default {
   props: ["user", "userid", "active", "depth", "isPartner"],
@@ -77,19 +87,21 @@ export default {
         id: props.user.id,
       });
     };
-    const checkParent = computed(() =>
-      store.getters["tree/checkParent"](props.user.id)
-    );
+
+    onMounted(() => {
+      console.log(props.user);
+    });
 
     const showSibling = async () => {
       store.dispatch("tree/removeCurrentTree");
-
       await store.dispatch("tree/addMemberSibling", { id: props.userid });
     };
 
     const showPartner = async () => {
       store.dispatch("tree/removeCurrentTree");
-      await store.dispatch("tree/addMemberPartner", { id: props.userid });
+      if (!props.user.partner) {
+        await store.dispatch("tree/addMemberPartner", { id: props.userid });
+      }
     };
 
     const showChildren = async () => {
@@ -108,7 +120,6 @@ export default {
       showParent,
       showSibling,
       showChildren,
-      checkParent,
       showPartner,
     };
   },
@@ -150,8 +161,8 @@ export default {
 }
 
 .partner {
-  background: rgba(255, 0, 0, 0.1);
-  border: 1px solid red;
+  background: #f5f7b211;
+  border: 1px solid #e28f83;
 }
 
 .active {
@@ -176,8 +187,8 @@ export default {
 }
 
 .partner button {
-  background: rgba(255, 0, 0, 1);
+  background: #e28f83;
   color: #fff;
-  border: 1px solid red;
+  border: 1px solid #e28f83;
 }
 </style>

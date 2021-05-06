@@ -7,7 +7,6 @@
 <script>
 import { computed, onMounted, ref } from "@vue/runtime-core";
 import { useStore, mapGetters } from "vuex";
-import { v4 } from "uuid";
 
 import Generation from "../../../components/App/Tree/Generation";
 export default {
@@ -20,14 +19,8 @@ export default {
     const parent = computed(() => store.getters["tree/parent"]);
 
     onMounted(async () => {
-      await store.dispatch("tree/getTreeData", {
-        id: v4(),
-        name: store.state.auth.currentUser.firstname,
-        parent: null,
-        depth: 0,
-        children: [],
-        type: "children",
-      });
+      await store.dispatch("tree/getTreeData");
+      console.log(store.state.tree.tree);
       console.log(parent.value);
     });
     return {

@@ -1,11 +1,11 @@
 <template>
-  <div :class="{ 'child-item-outer': true }">
+  <div :class="{ 'child-item-outer': true, partner }">
     <div class="child-item" @click="showContainer">
       <img src="../../../assets/icons/grid-2.svg" alt="calendar-icon" />
       <div class="sample">
         <input type="text" name="name" v-model="name" :placeholder="user.id" />
 
-        <select name="gender" v-model="gender" id="Gender">
+        <select name="gender" v-model="gender" id="gender">
           <option value="" selected>select</option>
           <option value="male">Male</option>
           <option value="female">Female</option>
@@ -22,18 +22,16 @@
 </template>
 
 <script>
-import { getCurrentInstance, onMounted, ref } from "@vue/runtime-core";
+import { onMounted, ref } from "@vue/runtime-core";
 import { useStore } from "vuex";
 export default {
-  props: ["user", "userid", "depth"],
+  props: ["user", "userid", "depth", "partner"],
   setup(props) {
     const store = useStore();
     const name = ref(props.user.name);
     const dob = ref("");
     const gender = ref("");
-    const appInstance = getCurrentInstance();
-    const eventBus =
-      appInstance.appContext.app.config.globalProperties.eventBus;
+    const relationship = ref("");
 
     const remove = async () => {
       await store.dispatch("tree/removeMemberData", props.user);
@@ -44,24 +42,29 @@ export default {
     });
 
     const submit = async () => {
+      let parent = props.user.parent
+        ? typeof props.user.parent === "string"
+          ? props.user.parent
+          : props.user.parent.id
+        : null;
       const data = {
         name: name.value,
         dob: dob.value,
         id: props.user.id,
         type: props.user.type,
-        gender: "female",
-        parentId: props.user.parentId,
-        parent: props.user.parent ? props.user.parent.id : null,
+        gender: gender.value,
+        ref: props.user.ref,
+        parent: parent || null,
         depth: props.user.type === "parent" ? 1 : 0,
       };
       console.log(data);
       if (name.value !== "") {
         await store.dispatch("tree/addTreeData", data);
-        eventBus.emit("showModal", {
-          title: "Success",
-          message: "Data added successfully",
-          buttonText: "close",
-        });
+        // eventBus.emit("showModal", {
+        //   title: "Success",
+        //   message: "Data added successfully",
+        //   buttonText: "close",
+        // });
       }
     };
     return {
@@ -69,6 +72,7 @@ export default {
       submit,
       remove,
       dob,
+      relationship,
       gender,
     };
   },
@@ -96,6 +100,11 @@ export default {
   font-size: 0.8rem;
   padding: 5px;
 }
+
+.partner .sample > * {
+  border: 1px solid #e28f83;
+}
+
 input[type="date"] {
   padding: 0 5px;
 }
@@ -138,6 +147,6 @@ input[type="date"] {
   height: 15px;
 }
 .partner {
-  background: lightcoral;
+  background: #ffe268;
 }
 </style>

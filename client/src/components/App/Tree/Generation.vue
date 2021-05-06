@@ -19,22 +19,18 @@
         class="arrow left-arrow"
         :style="{ left: -size + 'px' }"
         @click="moveLeft"
-        v-if="parent.length > 0"
+        v-if="arrowCheck >= 0"
       >
         <img
           src="../../../assets/icons/arrow_right.svg"
-          alt=""
+          alt="arrow-left"
           class="arrow-icon left-arrow-icon"
         />
       </div>
-      <div
-        class="arrow right-arrow"
-        @click="moveRight"
-        v-if="parent.length > 0"
-      >
+      <div class="arrow right-arrow" @click="moveRight" v-if="arrowCheck >= 0">
         <img
           src="../../../assets/icons/arrow_right.svg"
-          alt=""
+          alt="arrow-right"
           class="arrow-icon"
         />
       </div>
@@ -56,12 +52,11 @@ export default {
   props: ["depth", "parent", "selected"],
   watch: {
     parent: function (newval, oldval) {
-      console.log(oldval, newval, this.depth, this.maya);
       if (newval.length > 0) {
         if (this.maya && this.depth >= 1 && this.maya[this.depth - 1] >= 0) {
           this.sel = this.maya[this.depth - 1];
-          console.log(this.sel);
-          this.size = -this.sel * 250;
+          // this.size = -this.sel * 250;
+          this.size = 0;
         } else {
           this.sel = 0;
           this.size = 0;
@@ -72,9 +67,11 @@ export default {
   setup(props) {
     const store = useStore();
     const sel = ref(0);
-    const selected = ref(null);
+    const arrowCheck = ref(0);
 
     const size = ref(0);
+
+    arrowCheck.value = Array.isArray(props.parent) ? props.parent.length : 0;
 
     const user = computed(() =>
       Array.isArray(props.parent)
@@ -83,13 +80,12 @@ export default {
     );
 
     const userCheck = computed(() => {
-      console.log(props.parent, sel.value);
       if (props.parent) {
         let res = Array.isArray(props.parent)
           ? root.value[props.parent[sel.value]].children.length > 0
           : root.value[props.parent].children.length > 0;
         if (!res) {
-          res = root.value[props.parent[0]].children.length > 0;
+          res = false;
         }
         return res;
       } else {
@@ -103,8 +99,6 @@ export default {
       maya.value = null;
       store.dispatch("tree/resetParent");
       sel.value = props.parent.indexOf(args.id);
-      console.log(props.parent.indexOf(args.id));
-      console.log("depth" + props.depth);
     };
 
     const moveLeft = () => {
@@ -113,12 +107,13 @@ export default {
       }
     };
     const moveRight = () => {
-      if (size.value > -(10 - 2) * 250) {
+      if (size.value > -(10 * 2 - 1) * 260) {
         size.value += -250;
+        console.log(size.value);
       }
     };
     onMounted(() => {
-      console.log(maya.value, props.depth);
+      console.log(arrowCheck.value);
       if (maya.value && maya.value[props.depth - 1]) {
         sel.value = maya.value[props.depth - 1];
       }
@@ -133,6 +128,7 @@ export default {
       moveRight,
       maya,
       showChildren,
+      arrowCheck,
       size,
       root,
       sel,
@@ -182,7 +178,7 @@ export default {
   padding: 5px 10px;
   transform: scale(1.1);
   margin-left: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   overflow: hidden;
   border: 1px solid #adb6bb88;
 }
