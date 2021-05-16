@@ -30,3 +30,18 @@ export const findPathToParent = (state) => {
     return newIndex || null;
   };
 };
+
+
+
+export const heightTree = (state) => {
+  let data = state.tree;
+  let heightOf = (item) => {
+    return {
+      name: data[item].name,
+      id: data[item].id,
+      partner: data[item].partner,
+      children: data[item].children.map((obj) => heightOf(obj)) || [],
+    };
+  };
+  return heightOf;
+};
