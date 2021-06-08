@@ -1,6 +1,6 @@
 <template>
   <ul class="children-view-cl">
-    <li class="test" :id="parent.name">
+    <li class="tests" :id="parent.name">
       <span class="name-parent">
         <span
           class="name-parent-parent"
@@ -10,10 +10,18 @@
           }}
           <span
             class="divider-val"
-            :style="{
-              width: maxGap - 180 + 'px',
-              right: -maxGap + 180 + 'px',
-            }"
+            :style="
+              parent.partner
+                ? {
+                    width: maxGap - 180 + 'px',
+                    right: -maxGap + 180 + 'px',
+                  }
+                : {
+                    width: maxGap - 150 + 'px',
+                    right: -maxGap + 180 + 'px',
+                    top: '30px',
+                  }
+            "
             v-if="parent.children.length > 0"
           ></span>
           <span class="parent-after" v-if="parent.partner"></span>
@@ -59,13 +67,18 @@ export default {
     const store = useStore();
     const root = computed(() => store.state.tree.tree);
 
-    const showToolTip = async (event, id) => {};
+    const showToolTip = async (event, id) => {
+      console.log(id);
+    };
 
     const changeTree = async (event, id) => {
       console.log("clicked", id);
-      await store.dispatch("tree/addMemberParent", {
-        id,
-      });
+      console.log(root.value[id].parent);
+      if (root.value[id].parent && root.value[id].parent.status === "active") {
+        await store.dispatch("tree/addMemberParent", {
+          id,
+        });
+      }
     };
 
     onMounted(() => {
@@ -90,23 +103,21 @@ export default {
   list-style-type: none;
   text-align: left;
   display: flex;
+  position: relative;
+  height: auto;
   flex-direction: column;
   text-align: left;
   padding: 10px 0px 10px 10px;
   box-sizing: border-box;
+  border: none;
 }
-
-.test {
-  text-align: left;
-  position: relative;
-}
-
-.test {
+.tests {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 60px;
+  text-align: left;
+  position: relative;
 }
-
 li .name-parent {
   align-self: center;
   width: 150px;
@@ -119,7 +130,6 @@ li .name-parent {
   padding: 10px 20px 10px 10px;
   position: relative;
 }
-
 .name-parent-parent {
   display: flex;
   align-items: center;
@@ -130,7 +140,6 @@ li .name-parent {
   margin-bottom: 20px;
   margin-left: 10px;
 }
-
 .name-parent-partner {
   display: flex;
   align-items: center;
@@ -142,13 +151,11 @@ li .name-parent {
   border: 1px solid #e28f83;
   padding: 10px 20px 10px 10px;
 }
-
 span img {
   margin-right: 5px;
   border-radius: 50%;
   border: 0.5px solid green;
 }
-
 .divider-val {
   position: absolute;
   width: 60px;
@@ -157,7 +164,6 @@ span img {
   border-bottom: 0.5px solid #008bdc;
   height: 1px;
 }
-
 .name-parent-parent::before {
   content: "";
   position: absolute;
@@ -167,7 +173,6 @@ span img {
   top: 35px;
   border-bottom: 1px solid gray;
 }
-
 .partner-after {
   position: absolute;
   content: "";
@@ -180,7 +185,6 @@ span img {
 .name-parent > * {
   cursor: pointer;
 }
-
 .partner-before {
   position: absolute;
   content: "";
@@ -190,7 +194,6 @@ span img {
   top: -45px;
   border-left: 1px solid gray;
 }
-
 .parent-after {
   position: absolute;
   content: "";

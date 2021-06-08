@@ -1,14 +1,15 @@
-export const parent = (state) => {
+const parent = (state) => {
   if (Object.values(state.tree).length > 0) {
     let obj = Object.values(state.tree);
     let res = obj
       .filter((a) => a.parent === null && a.depth === 1)
       .map((a) => a.id)[0];
+    console.log(res);
     return res;
   }
 };
 
-export const checkParent = (state) => {
+const checkParent = (state) => {
   return (id) => {
     if (state.tree[id].parent) {
       return true;
@@ -17,7 +18,7 @@ export const checkParent = (state) => {
   };
 };
 
-export const findPathToParent = (state) => {
+const findPathToParent = (state) => {
   return (id) => {
     let res = state.tree[id];
     let parent = state.tree[id].parent;
@@ -31,9 +32,8 @@ export const findPathToParent = (state) => {
   };
 };
 
-
-
-export const heightTree = (state) => {
+// to generate tree structure
+const heightTree = (state) => {
   let data = state.tree;
   let heightOf = (item) => {
     return {
@@ -41,7 +41,16 @@ export const heightTree = (state) => {
       id: data[item].id,
       partner: data[item].partner,
       children: data[item].children.map((obj) => heightOf(obj)) || [],
+      status: data[item].status,
+      parent: data[item].parent,
     };
   };
   return heightOf;
+};
+
+export const getters = {
+  parent,
+  checkParent,
+  findPathToParent,
+  heightTree,
 };

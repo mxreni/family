@@ -134,6 +134,7 @@ export default {
             email: email.value,
             password: password.value,
           });
+          await store.dispatch("auth/getCurrentUserData");
           if (store.state.auth.currentUser) {
             loading.value = false;
             router.go("/");

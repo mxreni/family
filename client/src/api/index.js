@@ -1,5 +1,5 @@
 import Axios from "axios";
-
+import { v4 as uuid } from "uuid";
 const prodApiURL = "";
 export const devApiURL = "http://localhost:3000";
 
@@ -25,6 +25,7 @@ export const signup = async (data) => {
   try {
     console.log(data);
     const result = await axios.post("", {
+      id: uuid(),
       firstname: data.firstname,
       lastname: data.lastname,
       email: data.email,
@@ -49,7 +50,7 @@ export const logout = async () => {
 export const getCurrentUser = async () => {
   try {
     const result = await axios.get();
-    console.log(result);   
+    console.log(result);
     return { ...result.data, status: "success" };
   } catch (err) {
     return err.response.data;
@@ -77,6 +78,7 @@ export const put = async (url, data) => {
         "Content-Type": "multipart/form-data",
       },
     });
+    // const res = await axios.put(url, data);
     return res.data;
   } catch (err) {
     return err.response.data;

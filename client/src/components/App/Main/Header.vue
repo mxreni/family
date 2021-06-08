@@ -1,31 +1,33 @@
 <template>
   <div class="nav-bar">
-    <div class="nav-brand">
-      <img
-        src="../../../assets/icons/menu.svg"
-        alt="user"
-        @click="openSidebar"
-        class="nav-brand nav-brand-mobile nav-icon"
-      />
-      <img
-        src="../../../assets/FamLight.svg"
-        alt="logo"
-        class="nav-brand-logo"
-      />
-      <h3 class="nav-brand-title">MyFamily</h3>
-    </div>
-    <div class="nav-brand nav-brand-right">
-      <p class="username">Hi, {{ first_name }}</p>
-      <img
-        src="../../../assets/icons/person-white.svg"
-        alt="user"
-        class="person nav-icon"
-      />
-      <img
-        src="../../../assets/icons/notifications.svg"
-        alt="user"
-        class="notification nav-icon"
-      />
+    <div class="nav-bar-container">
+      <div class="nav-brand">
+        <img
+          src="../../../assets/icons/menu.svg"
+          alt="user"
+          @click="openSidebar"
+          class="nav-brand nav-brand-mobile nav-icon"
+        />
+        <img
+          src="../../../assets/FamLight.svg"
+          alt="logo"
+          class="nav-brand-logo"
+        />
+        <h3 class="nav-brand-title">MyFamily</h3>
+      </div>
+      <div class="nav-brand nav-brand-right">
+        <p class="username">Hi, {{ first_name }}</p>
+        <img
+          src="../../../assets/icons/person-white.svg"
+          alt="user"
+          class="person nav-icon"
+        />
+        <img
+          src="../../../assets/icons/notifications.svg"
+          alt="user"
+          class="notification nav-icon"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -64,9 +66,26 @@ export default {
 .nav-bar {
   height: 70px;
   background: #008dbc;
+}
+
+.nav-bar-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 100%;
+}
+
+.nav-bar-menu-item {
+  color: #fff;
+  text-decoration: none;
+  border: #fff;
+  align-items: center;
+}
+
+.nav-bar-menu-item-text {
+  color: #fff;
+  border: 1px solid #fff;
+  padding: 10px 30px;
 }
 
 .nav-brand-logo {
@@ -138,10 +157,17 @@ export default {
     display: block;
   }
   .nav-bar {
+    max-width: 100%;
+    padding: 0 2rem;
+  }
+
+  .nav-bar-container {
     max-width: 1400px;
-    padding: 0 4rem;
     margin-left: auto;
     margin-right: auto;
+  }
+  .nav-brand {
+    margin-left: 2rem;
   }
   .nav-brand-right {
     display: flex;

@@ -1,4 +1,5 @@
 <template>
+  <TreeNavBar />
   <div class="gen-style">
     <Generation v-if="parent" :parent="parent" :depth="0" />
   </div>
@@ -7,11 +8,13 @@
 <script>
 import { computed, onMounted, ref } from "@vue/runtime-core";
 import { useStore, mapGetters } from "vuex";
+import TreeNavBar from "../../../components/App/Tree/TreeNavBar";
 
 import Generation from "../../../components/App/Tree/Generation";
 export default {
   components: {
     Generation,
+    TreeNavBar,
   },
 
   setup() {
@@ -20,8 +23,8 @@ export default {
 
     onMounted(async () => {
       await store.dispatch("tree/getTreeData");
-      console.log(store.state.tree.tree);
-      console.log(parent.value);
+      // console.log(store.state.tree.tree);
+      // console.log(parent.value);
     });
     return {
       parent,
@@ -36,17 +39,8 @@ export default {
   text-align: left;
   font-size: 1.2rem;
 }
-.fam-1 {
-  display: flex;
-  flex-direction: column;
-}
-.li-fam {
-  list-style-type: none;
-  padding-right: 10px;
-  padding: 10px;
-  font-size: 1.2rem;
-}
 .gen-style {
   margin-top: 2rem;
+  max-width: 1100px;
 }
 </style>

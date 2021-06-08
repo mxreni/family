@@ -1,28 +1,28 @@
 import { initMember } from "./helper";
 
-export const addMemberChild = ({ commit, state }, payload) => {
+const addMemberChild = ({ commit, state }, payload) => {
   const parent = state.tree[payload.id];
   const item = initMember("children", null, parent);
   console.log(item);
   commit("addChildren", item);
 };
 
-export const addMemberSibling = ({ commit, state }, payload) => {
+const addMemberSibling = ({ commit, state }, payload) => {
   let val = state.tree[payload.id].parent;
   const parent = Number(val) ? state.tree[val] : val;
   const item = initMember("sibling", null, parent);
   commit("addChildren", item);
 };
 
-export const addMemberPartner = ({ commit, state }, payload) => {
+const addMemberPartner = ({ commit, state }, payload) => {
   let children = state.tree[payload.id].children;
   const item = initMember("partner", payload.id, null, children);
   commit("addPartner", item);
 };
 
-export const addMemberParent = ({ commit, state, getters }, payload) => {
+const addMemberParent = ({ commit, state, getters }, payload) => {
   let parent = state.tree[payload.id].parent;
-  let check = parent && parent.status === "Active";
+  let check = parent && parent.status === "active";
   if (!check) {
     const item = {
       ...initMember("parent", payload.id, null, [payload.id]),
@@ -35,7 +35,7 @@ export const addMemberParent = ({ commit, state, getters }, payload) => {
   }
 };
 
-export const removeMemberData = ({ commit, state }, item) => {
+const removeMemberData = ({ commit, state }, item) => {
   if (item.type === "parent") {
     commit("removeParent", item);
   } else if (item.type === "children" || item.type === "sibling") {
@@ -45,6 +45,32 @@ export const removeMemberData = ({ commit, state }, item) => {
   }
 };
 
-export const resetParent = ({ state }) => {
+const resetParent = ({ state }) => {
   state.parent = null;
+};
+
+const cleanUpStateTree = ({ state, commit }) => {
+  commit(state);
+};
+
+// edit
+
+const editCurrentTree = ({ state }, item) => {
+  state.tree[item.id].status = "draft";
+};
+
+const cancelTreeUpdate = ({ state }, item) => {
+  state.tree[item.id].status = "active";
+};
+
+export const uiActions = {
+  cancelTreeUpdate,
+  editCurrentTree,
+  addMemberChild,
+  addMemberParent,
+  addMemberSibling,
+  addMemberPartner,
+  removeMemberData,
+  resetParent,
+  cleanUpStateTree,
 };

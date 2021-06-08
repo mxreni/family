@@ -87,9 +87,6 @@ export default {
   .home-sidebar {
     display: block;
   }
-  .home-mainbar {
-    margin: 0 auto;
-  }
 }
 @media screen and (min-width: 1024px) {
   body {
@@ -99,20 +96,19 @@ export default {
   .home-container {
     width: 100%;
     max-width: 1300px;
+    display: grid;
+    grid-template-columns: 200px auto;
     margin: 0 auto;
     height: 92vh;
   }
   .home-sidebar {
     height: 90%;
-    float: left;
     display: block;
-    width: 250px;
   }
   .home-mainbar {
     float: right;
-    width: calc(100% - 251px);
-    min-height: calc(100vh - 70px);
-    border-left: 0.8px solid #008dbc55;
+    border-left: 1px solid#008bdc;
+    max-width: 1100px;
   }
 }
 </style>

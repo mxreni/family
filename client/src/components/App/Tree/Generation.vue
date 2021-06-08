@@ -1,10 +1,10 @@
 <template>
-  <div class="scroll-container">
+  <div :class="{ 'scroll-container': true }" :id="'depth' + '-' + depth">
     <h6 class="scroll-container-title">Generation-{{ depth }}</h6>
     <div
       class="scroll-container-inner"
       :style="{ marginLeft: size + 'px' }"
-      ref="container"
+      :ref="'depth' + '-' + depth"
     >
       <ChildrenView
         v-for="(item, index) in Array.isArray(parent) ? parent : [parent]"
@@ -19,7 +19,6 @@
         class="arrow left-arrow"
         :style="{ left: -size + 'px' }"
         @click="moveLeft"
-        v-if="arrowCheck >= 0"
       >
         <img
           src="../../../assets/icons/arrow_right.svg"
@@ -27,7 +26,7 @@
           class="arrow-icon left-arrow-icon"
         />
       </div>
-      <div class="arrow right-arrow" @click="moveRight" v-if="arrowCheck >= 0">
+      <div class="arrow right-arrow" @click="moveRight">
         <img
           src="../../../assets/icons/arrow_right.svg"
           alt="arrow-right"
@@ -39,9 +38,8 @@
   <Generation v-if="userCheck" :parent="user" :depth="depth + 1" />
 </template>
 
-
 <script>
-import { computed, onMounted, ref } from "@vue/runtime-core";
+import { computed, onMounted, onUpdated, ref, watch } from "@vue/runtime-core";
 import ChildrenView from "../../../components/App/Tree/ChildrenView";
 import { useStore } from "vuex";
 
@@ -49,13 +47,21 @@ export default {
   components: {
     ChildrenView,
   },
-  props: ["depth", "parent", "selected"],
+  props: ["depth", "parent"],
+  methods: {
+    checkRef: function() {
+      console.log(this.$refs["depth-" + this.depth]);
+    },
+  },
   watch: {
-    parent: function (newval, oldval) {
+    parent: function(newval, oldval) {
       if (newval.length > 0) {
-        if (this.maya && this.depth >= 1 && this.maya[this.depth - 1] >= 0) {
-          this.sel = this.maya[this.depth - 1];
-          // this.size = -this.sel * 250;
+        if (
+          this.selectedVal &&
+          this.depth >= 1 &&
+          this.selectedVal[this.depth - 1] >= 0
+        ) {
+          this.sel = this.selectedVal[this.depth - 1];
           this.size = 0;
         } else {
           this.sel = 0;
@@ -64,14 +70,12 @@ export default {
       }
     },
   },
+
   setup(props) {
     const store = useStore();
     const sel = ref(0);
     const arrowCheck = ref(0);
-
     const size = ref(0);
-
-    arrowCheck.value = Array.isArray(props.parent) ? props.parent.length : 0;
 
     const user = computed(() =>
       Array.isArray(props.parent)
@@ -89,34 +93,37 @@ export default {
         }
         return res;
       } else {
-        console.log(props.parent);
+        // console.log(props.parent);
       }
     });
 
-    const maya = computed(() => store.state.tree.parent);
+    const selectedVal = computed(() => store.state.tree.parent);
 
     const showChildren = (args) => {
-      maya.value = null;
+      selectedVal.value = null;
       store.dispatch("tree/resetParent");
       sel.value = props.parent.indexOf(args.id);
     };
 
     const moveLeft = () => {
       if (size.value < 0) {
-        size.value += 250;
+        size.value += 260;
       }
     };
     const moveRight = () => {
       if (size.value > -(10 * 2 - 1) * 260) {
-        size.value += -250;
-        console.log(size.value);
+        size.value += -260;
+        // console.log(size.value);
       }
     };
     onMounted(() => {
-      console.log(arrowCheck.value);
-      if (maya.value && maya.value[props.depth - 1]) {
-        sel.value = maya.value[props.depth - 1];
+      if (selectedVal.value && selectedVal.value[props.depth - 1]) {
+        sel.value = selectedVal.value[props.depth - 1];
       }
+      // console.log(arrowCheck.value);
+      const numnodes = document.getElementById("depth" + "-" + props.depth)
+        .lastElementChild.children.length;
+      arrowCheck.value = numnodes;
     });
 
     const root = computed(() => store.state.tree.tree);
@@ -126,7 +133,7 @@ export default {
       userCheck,
       moveLeft,
       moveRight,
-      maya,
+      selectedVal,
       showChildren,
       arrowCheck,
       size,
@@ -136,8 +143,6 @@ export default {
   },
 };
 </script>
-
-
 
 <style>
 .arrow {

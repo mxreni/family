@@ -1,16 +1,20 @@
- <template>
-  <div
-    class="container"
-    v-if="userLogged && first_name"
-  >
-    <p> Logged in successfully <router-link
+<template>
+  <div class="container" v-if="userLogged && first_name">
+    <p>
+      Logged in successfully
+      <router-link
         @click="logOut"
         class="user-name log-out"
-        :to="{name:'Login'}"
-      >logout</router-link>
+        :to="{ name: 'Login' }"
+        >logout</router-link
+      >
     </p>
-    <p>Hi <span class="user-name">{{first_name}} {{last_name}}</span></p>
-    <p><span class="user-name">User ID: {{user_name}}</span></p>
+    <p>
+      Hi <span class="user-name">{{ first_name }} {{ last_name }}</span>
+    </p>
+    <p>
+      <span class="user-name">User ID: {{ user_name }}</span>
+    </p>
   </div>
 </template>
 
@@ -58,6 +62,7 @@ export default {
   display: grid;
   height: 100vh;
   place-content: center;
+  max-width: 1100px;
 }
 .user-name {
   text-transform: capitalize;

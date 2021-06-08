@@ -32,7 +32,6 @@ export default {
     const userLogged = computed(() => store.state.auth.loggedin);
 
     onMounted(async () => {
-      console.log(userLogged)
       await store.dispatch("auth/getCurrentUserData");
       console.log(userLogged.value)
       if (!store.state.auth.loggedin) {

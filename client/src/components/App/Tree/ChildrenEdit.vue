@@ -1,7 +1,21 @@
 <template>
   <div :class="{ 'child-item-outer': true, partner }">
     <div class="child-item" @click="showContainer">
-      <img src="../../../assets/icons/grid-2.svg" alt="calendar-icon" />
+      <img
+        :src="image ? image : require('../../../assets/icons/grid-2.svg')"
+        alt="calendar-icon"
+        @click="openFileUploader"
+        class="card-image card-image-edit"
+      />
+      <input
+        type="file"
+        hidden
+        id="file"
+        accept="image/*"
+        class="file"
+        name="file"
+        @change="updateImage"
+      />
       <div class="sample">
         <input type="text" name="name" v-model="name" :placeholder="user.id" />
 
@@ -15,8 +29,12 @@
       </div>
     </div>
     <div class="button sample-icon">
-      <button class="btn" @click="submit">Add</button>
-      <button class="btn" @click="remove">Remove</button>
+      <button class="btn" @click="submit">
+        {{ user.status === "draft" ? "Update" : "Add" }}
+      </button>
+      <button class="btn" @click="remove">
+        {{ user.status === "draft" ? "Cancel" : "Remove" }}
+      </button>
     </div>
   </div>
 </template>
@@ -29,17 +47,33 @@ export default {
   setup(props) {
     const store = useStore();
     const name = ref(props.user.name);
-    const dob = ref("");
-    const gender = ref("");
+    const dob = ref(props.user.DOB || "");
+    const gender = ref(props.user.gender || "");
     const relationship = ref("");
+    const image = ref(props.user.photourl || null);
+    const file = ref(null);
 
     const remove = async () => {
-      await store.dispatch("tree/removeMemberData", props.user);
+      if (props.user.status === "draft") {
+        await store.dispatch("tree/cancelTreeUpdate", { id: props.user.id });
+      } else {
+        await store.dispatch("tree/removeMemberData", props.user);
+      }
+    };
+
+    const updateImage = (ev) => {
+      image.value = URL.createObjectURL(ev.target.files[0]);
+      file.value = ev.target.files[0];
     };
 
     onMounted(() => {
       console.log(props.user);
     });
+
+    const openFileUploader = () => {
+      const fileEL = document.getElementById("file");
+      fileEL.click();
+    };
 
     const submit = async () => {
       let parent = props.user.parent
@@ -47,24 +81,22 @@ export default {
           ? props.user.parent
           : props.user.parent.id
         : null;
-      const data = {
-        name: name.value,
-        dob: dob.value,
-        id: props.user.id,
-        type: props.user.type,
-        gender: gender.value,
-        ref: props.user.ref,
-        parent: parent || null,
-        depth: props.user.type === "parent" ? 1 : 0,
-      };
-      console.log(data);
-      if (name.value !== "") {
-        await store.dispatch("tree/addTreeData", data);
-        // eventBus.emit("showModal", {
-        //   title: "Success",
-        //   message: "Data added successfully",
-        //   buttonText: "close",
-        // });
+      const fData = new FormData();
+      fData.append("name", name.value);
+      fData.append("dob", dob.value);
+      fData.append("id", props.user.id);
+      fData.append("gender", gender.value);
+      fData.append("file", file.value ? file.value : null);
+      if (props.user.status !== "draft") {
+        fData.append("type", props.user.type);
+        fData.append("ref", props.user.ref);
+        fData.append("parent", parent);
+        fData.append("depth", props.user.type === "parent" ? 1 : 0);
+        if (name.value !== "") {
+          await store.dispatch("tree/addTreeData", fData);
+        }
+      } else {
+        await store.dispatch("tree/updateTreeData", fData);
       }
     };
     return {
@@ -73,7 +105,10 @@ export default {
       remove,
       dob,
       relationship,
+      updateImage,
+      openFileUploader,
       gender,
+      image,
     };
   },
 };
@@ -90,6 +125,10 @@ export default {
   width: 80px;
   border-radius: 10px;
   height: 80px;
+}
+.card-image-edit {
+  margin: 10px -5px;
+  margin-left: 1px;
 }
 
 .sample > * {

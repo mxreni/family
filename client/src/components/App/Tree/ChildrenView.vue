@@ -1,6 +1,6 @@
 <template>
   <ChildrenEdit
-    v-if="user && user.status !== 'Active'"
+    v-if="user && user.status !== 'active'"
     :userid="user.id"
     :user="user"
     :depth="depth"
@@ -18,7 +18,11 @@
     <div>
       <div class="child-item" @click="showChildren">
         <img
-          src="../../../assets/icons/grid-2.svg"
+          :src="
+            user.photourl
+              ? user.photourl
+              : require('../../../assets/icons/grid-2.svg')
+          "
           alt="user"
           class="card-image"
         />
@@ -30,16 +34,17 @@
                 memberId: user.id,
               },
             }"
+            class="card-title-link"
           >
             <p class="card-title">{{ user.name }}</p>
           </router-link>
           <p>Gender:{{ user.gender || "unknown" }}</p>
-          <p>DOB: {{ user.dob ? user.dob : "3444-23-23" }}</p>
+          <p>DOB: {{ user.DOB ? user.DOB : "3444-23-23" }}</p>
           <p>{{ "Relationship: Friend" }}</p>
         </div>
       </div>
       <div class="button sample-icon">
-        <button class="btn">Edit</button>
+        <button class="btn" @click="newEdit">Edit</button>
         <button v-if="!isPartner" class="btn" @click="showPartner">
           Partner
         </button>
@@ -88,6 +93,10 @@ export default {
       });
     };
 
+    const newEdit = async () => {
+      await store.dispatch("tree/editCurrentTree", { id: props.user.id });
+    };
+
     onMounted(() => {
       console.log(props.user);
     });
@@ -118,6 +127,7 @@ export default {
 
     return {
       showParent,
+      newEdit,
       showSibling,
       showChildren,
       showPartner,
@@ -147,7 +157,6 @@ export default {
   background: linear-gradient(to bottom right, #f005, #008bdc55);
   /* border-bottom: 3px solid #008bdc55; */
 }
-
 .child-item-outer {
   border: 1px solid #008bdc;
   width: 100%;
@@ -158,6 +167,11 @@ export default {
   margin: 10px 5px;
   padding: 5px 10px;
   height: 130px;
+}
+.card-title-link {
+  text-decoration: none;
+  text-transform: capitalize;
+  letter-spacing: 0.04em;
 }
 
 .partner {

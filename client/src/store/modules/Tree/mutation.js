@@ -1,12 +1,13 @@
 import { updateChildren } from "./helper";
 
-export const addChildren = (state, item) => {
+// add ui mutations
+const addChildren = (state, item) => {
   const parent = typeof item.parent === "string" ? item.parent : item.parent.id;
   updateChildren(parent, item, state);
   state.tree[item.id] = state.currentTree = item;
 };
 
-export const addPartner = (state, item) => {
+const addPartner = (state, item) => {
   console.log("here");
   let initRef = state.tree[item.ref];
   state.tree[item.ref] = {
@@ -17,7 +18,7 @@ export const addPartner = (state, item) => {
   state.currentTree = item;
 };
 
-export const addParent = (state, item) => {
+const addParent = (state, item) => {
   state.tree[item.id] = item;
   state.tree[item.children[0]].parent = item.id;
   Object.values(state.tree).map((a) => {
@@ -29,7 +30,7 @@ export const addParent = (state, item) => {
   state.parent = null;
 };
 
-export const readParent = (state, payload) => {
+const readParent = (state, payload) => {
   let parent = state.tree[payload.id].parent;
   let res;
   while (parent !== null) {
@@ -44,7 +45,8 @@ export const readParent = (state, payload) => {
   });
 };
 
-export const removeParent = (state, item) => {
+// remove mutations
+const removeParent = (state, item) => {
   state.tree[item.id].children.forEach((obj) => {
     state.tree[obj].parent = null;
     state.tree[obj].depth = 1;
@@ -52,7 +54,7 @@ export const removeParent = (state, item) => {
   delete state.tree[item.id];
 };
 
-export const removeChildren = (state, item) => {
+const removeChildren = (state, item) => {
   let parent = state.tree[item.id].parent.id;
   let children = state.tree[parent].children.filter((a) => a !== item.id);
   state.tree[parent] = {
@@ -62,8 +64,18 @@ export const removeChildren = (state, item) => {
   delete state.tree[item.id];
 };
 
-export const removePartner = (state, item) => {
+const removePartner = (state, item) => {
   state.tree[item.ref].partner = null;
   delete state.tree[item.id];
   console.log(item);
+};
+
+export const uiMutations = {
+  removeChildren,
+  removeParent,
+  removePartner,
+  readParent,
+  addChildren,
+  addParent,
+  addPartner,
 };

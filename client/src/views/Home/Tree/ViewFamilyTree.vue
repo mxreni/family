@@ -1,7 +1,7 @@
 <template>
   <TreeNavBar />
-  <div class="tree-container">
-    <GenerationTree v-if="parent" :parent="heightArr" :depth="0" />
+  <div class="tree-container" v-if="loaded">
+    <GenerationTree v-if="parent && heightArr" :parent="heightArr" :depth="0" />
   </div>
 </template>
 
@@ -18,6 +18,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const loaded = ref(false);
     const root = computed(() => store.state.tree.tree);
     const parent = computed(() => store.getters["tree/parent"]);
     const heightArr = computed(() =>
@@ -26,29 +27,27 @@ export default {
 
     onMounted(async () => {
       await store.dispatch("tree/getTreeData");
+      console.log(heightArr.value);
+      loaded.value = true;
     });
+
     return {
       parent,
       root,
       heightArr,
+      loaded,
     };
   },
 };
 </script>
 
 <style>
-@media screen and (min-width: 500px) {
-  .tree-container {
-    transform: scale(0.6);
-    margin-top: -250px;
-    margin-left: -100px;
-  }
-}
 @media screen and (min-width: 1024px) {
   .tree-container {
     transform: scale(1);
-    margin-left: 50px;
+    margin-left: 10px;
     margin-top: 40px;
+    max-width: 1100px;
   }
 }
 </style>

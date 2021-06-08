@@ -16,14 +16,7 @@ export default {
     SidebarItem,
   },
   setup(props, { emit }) {
-    const menus = [
-      "Home",
-      "Members",
-      "Tree",
-      "Location",
-      "Gallery",
-      "Calendar",
-    ];
+    const menus = ["Home", "Tree", "Location", "Gallery", "Calendar"];
     const closeSidebar = () => {
       if (window.innerWidth < 1024) {
         emit("closeSide");
