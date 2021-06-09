@@ -9,18 +9,19 @@ exports.Login = async (req, res) => {
   if (req.user) {
     console.log(req.user.firstname, req.user.lastname);
     let name = req.user.firstname + " " + req.user.lastname;
-    let found = await Trees.query().where("name", name);
-
-    if (!found.length) {
-      await Trees.query().insert({
-        id: genuuid(),
-        status: "active",
-        name: req.user.firstname + " " + req.user.lastname,
-        parent: req.body.parent,
-        depth: 1,
-        user: req.user.id,
-        relationship: "me",
-      });
+    let userTree = await Trees.query().where("user", req.user.id);
+    if (userTree.length === 0) {
+      let found = await Trees.query().where("name", name);
+      if (!found.length) {
+        await Trees.query().insert({
+          id: genuuid(),
+          status: "active",
+          name: req.user.firstname + " " + req.user.lastname,
+          depth: 1,
+          user: req.user.id,
+          relationship: "me",
+        });
+      }
     }
     return res.status(200).json({
       user: req.user,
