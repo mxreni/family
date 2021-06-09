@@ -15,24 +15,6 @@
         :active="sel === index"
         :depth="depth"
       />
-      <div
-        class="arrow left-arrow"
-        :style="{ left: -size + 'px' }"
-        @click="moveLeft"
-      >
-        <img
-          src="../../../assets/icons/arrow_right.svg"
-          alt="arrow-left"
-          class="arrow-icon left-arrow-icon"
-        />
-      </div>
-      <div class="arrow right-arrow" @click="moveRight">
-        <img
-          src="../../../assets/icons/arrow_right.svg"
-          alt="arrow-right"
-          class="arrow-icon"
-        />
-      </div>
     </div>
   </div>
   <Generation v-if="userCheck" :parent="user" :depth="depth + 1" />
@@ -176,15 +158,35 @@ export default {
   transform: rotate(180deg);
 }
 .scroll-container {
-  height: 180px;
+  height: 195px;
   width: 100%;
   position: relative;
   border-radius: 10px;
-  padding: 5px 10px;
+  padding: 9px 20px;
   transform: scale(1.1);
   margin-left: 2rem;
+  padding-right: 240px;
+  box-sizing: border-box;
   margin-bottom: 2.5rem;
   overflow: hidden;
+  overflow-x: auto;
+  scrollbar-color: #008dbc77 #0006;
+  scrollbar-width: thin;
   border: 1px solid #adb6bb88;
+}
+
+.scroll-container::-webkit-scrollbar {
+  height: 8px;
+  border-radius: 5px;
+  background-color: #0005;
+}
+.scroll-container::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: #008dbc55;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #008dbc;
 }
 </style>
