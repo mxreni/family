@@ -8,6 +8,7 @@
     "db:make": "knex migrate:make",
     "db:migrate": "knex migrate:latest",
     "db:rollback": "knex migrate:rollback",
+    "db:data": "knex seed:run",
     "start": "node src/index.js"
   },
   "author": "",
