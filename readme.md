@@ -1,7 +1,7 @@
-1. git clone 
+git clone https://github.com/mxreni/family.git
 
 ## To run the client 
----
+
 1. cd client/ && npm install .
 2. npm run serve
 3. If chrome browser , disable the following from chrome://flags
@@ -10,8 +10,8 @@
 4. open http://localhost:8080
 
 
-## To run the seever
----
+## To run the server
+
 1. cd express-server/ && npm install .
 2. mysql -u [username] -p [password]
 3. CREATE DATABASE 'myfamily'
