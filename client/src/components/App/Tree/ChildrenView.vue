@@ -85,7 +85,11 @@ export default {
     const store = useStore();
 
     const showParent = async () => {
-      store.dispatch("tree/removeCurrentTree");
+      let emptyMember = store.state.tree.currentTree;
+      if (emptyMember) {
+        let data = store.state.tree.tree[emptyMember.id];
+        store.dispatch("tree/removeMemberData", data);
+      }
       let depth = props.depth;
       let selected = props.user.id;
       await store.dispatch("tree/addMemberParent", {
