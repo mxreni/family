@@ -23,3 +23,19 @@ export const updateChildren = (parent, item, state) => {
     };
   }
 };
+
+
+export const shrinkChildren = (parent, item, state) => {
+  let children = state.tree[parent].children.filter((a) => a !== item.id);
+  state.tree[parent] = {
+    ...state.tree[parent],
+    children,
+  };
+  if (state.tree[parent].partner) {
+    let partner = state.tree[parent].partner.id;
+    state.tree[partner] = {
+      ...state.tree[partner],
+      children,
+    };
+  }
+};
