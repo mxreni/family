@@ -1,4 +1,4 @@
-import { updateChildren } from "./helper";
+import { updateChildren, shrinkChildren } from "./helper";
 
 // add ui mutations
 const addChildren = (state, item) => {
