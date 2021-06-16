@@ -52,23 +52,22 @@ const removeParent = (state, item) => {
     state.tree[obj].depth = 1;
   });
   delete state.tree[item.id];
+  state.currentTree = null;
 };
 
 const removeChildren = (state, item) => {
   let parent = state.tree[item.id].parent.id;
-  let children = state.tree[parent].children.filter((a) => a !== item.id);
-  state.tree[parent] = {
-    ...state.tree[parent],
-    children,
-  };
+  shrinkChildren(parent, item, state);
   delete state.tree[item.id];
+  state.currentTree = null;
 };
 
 const removePartner = (state, item) => {
   state.tree[item.ref].partner = null;
   delete state.tree[item.id];
-  console.log(item);
+  state.currentTree = null;
 };
+
 
 export const uiMutations = {
   removeChildren,
