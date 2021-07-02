@@ -12,10 +12,7 @@
 
 1. cd client/ && npm install .
 2. npm run serve
-3. If chrome browser , disable the following from chrome://flags
-   1. SameSite by default cookies
-   2. Cookies without SameSite must be secure
-4. open http://localhost:8080
+3. open http://localhost:8080
 
 
 ### To run the server
