@@ -25,7 +25,6 @@ exports.sessionOptions = {
   cookie: {
     path: "/",
     httpOnly: true,
-    sameSite: "none",
     secure: false,
     maxAge: 1000 * 60 * 60 * 24,
   },
