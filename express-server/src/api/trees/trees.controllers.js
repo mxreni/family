@@ -60,7 +60,7 @@ exports.createTree = async (req, res) => {
       name: req.body.name,
       depth: req.body.depth,
       gender: req.body.gender,
-      parent: req.body.parent,
+      parent: req.body.parent === 'null'? null : req.body.parent,
       user: req.user.id,
       photourl: req.file ? req.file.path : null,
       status: "active",
